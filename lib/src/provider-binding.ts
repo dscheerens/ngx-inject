@@ -25,7 +25,7 @@ export type UnboundProvider<T> = UnboundValueProvider<T> | UnboundClassProvider<
 
 export function bindProvider<T, U extends T>(
     token: Token<T>,
-    unboundProvider?: UnboundProvider<U>,
+    unboundProvider: UnboundProvider<U> | undefined,
     options: { multi?: boolean; default?: UnboundProvider<U> } = {}
 ): Provider {
     return (
