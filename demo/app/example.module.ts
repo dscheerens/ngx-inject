@@ -14,11 +14,18 @@ export const SECRET_MESSAGE = new InjectionToken<string>('SECRET_MESSAGE');
 
 export const MAGIC_NUMBER = new InjectionToken<number>('MAGIC_NUMBER');
 
+export const REFERENCE_DATE = new InjectionToken<Date>('REFERENCE_DATE');
+
+export function defaultReferenceDateFactory(): Date {
+    return new Date();
+}
+
 interface ExampleModuleOptions {
     httpClient: UnboundProvider<HttpClient>;
     service: UnboundProvider<ExampleService>;
     secretMessage: UnboundProvider<string>;
     magicNumber: UnboundProvider<number>;
+    referenceDate?: UnboundProvider<Date>;
 }
 
 @NgModule({})
@@ -31,7 +38,8 @@ export class ExampleModule {
                 bindProvider(EXAMPLE_MODULE_HTTP_CLIENT, options.httpClient),
                 bindProvider(ExampleService, options.service),
                 bindProvider(SECRET_MESSAGE, options.secretMessage),
-                bindProvider(MAGIC_NUMBER, options.magicNumber, { multi: true })
+                bindProvider(MAGIC_NUMBER, options.magicNumber, { multi: true }),
+                bindProvider(REFERENCE_DATE, options.referenceDate, { default: { useFactory: defaultReferenceDateFactory } })
             ]
         };
     }

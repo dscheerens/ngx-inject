@@ -25,35 +25,66 @@ export type UnboundProvider<T> = UnboundValueProvider<T> | UnboundClassProvider<
 
 export function bindProvider<T, U extends T>(
     token: Token<T>,
-    unboundProvider: UnboundProvider<U>,
-    options: { multi?: boolean } = {}
+    unboundProvider?: UnboundProvider<U>,
+    options: { multi?: boolean; default?: UnboundProvider<U> } = {}
 ): Provider {
     return (
-        (unboundProvider as UnboundValueProvider<U>).useValue ?
-            {
-                provide: token,
-                useValue: (unboundProvider as UnboundValueProvider<U>).useValue,
-                multi: options.multi
-            } :
-        (unboundProvider as UnboundClassProvider<U>).useClass ?
-            {
-                provide: token,
-                useClass: (unboundProvider as UnboundClassProvider<U>).useClass,
-                multi: options.multi
-            } :
-        (unboundProvider as UnboundExistingProvider<U>).useExisting ?
-            {
-                provide: token,
-                useExisting: (unboundProvider as UnboundExistingProvider<U>).useExisting,
-                multi: options.multi
-            } :
-        (unboundProvider as UnboundFactoryProvider<U>).useFactory ?
-            {
-                provide: token,
-                useFactory: (unboundProvider as UnboundFactoryProvider<U>).useFactory, // tslint:disable-line:no-unbound-method
-                deps: (unboundProvider as UnboundFactoryProvider<U>).deps,
-                multi: options.multi
-            } :
+        !!unboundProvider ? (
+            (unboundProvider as UnboundValueProvider<U>).useValue ?
+                {
+                    provide: token,
+                    useValue: (unboundProvider as UnboundValueProvider<U>).useValue,
+                    multi: options.multi
+                } :
+            (unboundProvider as UnboundClassProvider<U>).useClass ?
+                {
+                    provide: token,
+                    useClass: (unboundProvider as UnboundClassProvider<U>).useClass,
+                    multi: options.multi
+                } :
+            (unboundProvider as UnboundExistingProvider<U>).useExisting ?
+                {
+                    provide: token,
+                    useExisting: (unboundProvider as UnboundExistingProvider<U>).useExisting,
+                    multi: options.multi
+                } :
+            (unboundProvider as UnboundFactoryProvider<U>).useFactory ?
+                {
+                    provide: token,
+                    useFactory: (unboundProvider as UnboundFactoryProvider<U>).useFactory, // tslint:disable-line:no-unbound-method
+                    deps: (unboundProvider as UnboundFactoryProvider<U>).deps,
+                    multi: options.multi
+                } :
+            []
+        ) :
+        !!options.default ? (
+            (options.default as UnboundValueProvider<U>).useValue ?
+                {
+                    provide: token,
+                    useValue: (options.default as UnboundValueProvider<U>).useValue,
+                    multi: options.multi
+                } :
+            (options.default as UnboundClassProvider<U>).useClass ?
+                {
+                    provide: token,
+                    useClass: (options.default as UnboundClassProvider<U>).useClass,
+                    multi: options.multi
+                } :
+            (options.default as UnboundExistingProvider<U>).useExisting ?
+                {
+                    provide: token,
+                    useExisting: (options.default as UnboundExistingProvider<U>).useExisting,
+                    multi: options.multi
+                } :
+            (options.default as UnboundFactoryProvider<U>).useFactory ?
+                {
+                    provide: token,
+                    useFactory: (options.default as UnboundFactoryProvider<U>).useFactory, // tslint:disable-line:no-unbound-method
+                    deps: (options.default as UnboundFactoryProvider<U>).deps,
+                    multi: options.multi
+                } :
+            []
+        ) :
         []
     );
 }
