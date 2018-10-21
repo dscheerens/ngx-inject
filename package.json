@@ -1,0 +1,73 @@
+{
+  "name": "ngx-inject",
+  "version": "0.0.1",
+  "description": "Dependency injection utilities for Angular",
+  "homepage": "https://github.com/dscheerens/ngx-inject",
+  "author": "Daan Scheerens",
+  "license": "MIT",
+  "keywords": [
+    "angular",
+    "ngx",
+    "inject",
+    "dependency",
+    "injection",
+    "di",
+    "provider",
+    "utils",
+    "utilities"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dscheerens/ngx-inject.git"
+  },
+  "private": true,
+  "scripts": {
+    "ng": "ng",
+    "start": "ng serve --project=demo",
+    "serve.prod": "ng serve --project=demo --prod",
+    "lint": "tslint -p lib/tsconfig.lint.json -t stylish -c tslint.json",
+    "test": "ng test --project=lib --watch=false --code-coverage",
+    "test.watch": "ng test --project=lib --watch=true --code-coverage",
+    "build": "ng build --project=lib --prod",
+    "build.demo": "ng build --project=demo --prod",
+    "publish.dist": "npm publish build/dist"
+  },
+  "peerDependencies": {
+    "@angular/common": ">=6.0.0",
+    "@angular/core": ">=6.0.0",
+    "rxjs": "^6.0.0",
+    "tslib": "^1.9.0"
+  },
+  "devDependencies": {
+    "@angular-devkit/build-angular": "^0.7.5",
+    "@angular-devkit/build-ng-packagr": "^0.7.5",
+    "@angular/cli": "^6.2.6",
+    "@angular/common": "^6.1.10",
+    "@angular/compiler": "^6.1.10",
+    "@angular/compiler-cli": "^6.1.10",
+    "@angular/core": "^6.1.10",
+    "@angular/platform-browser": "^6.1.10",
+    "@angular/platform-browser-dynamic": "^6.1.10",
+    "@dscheerens/tslint-presets": "^3.0.0",
+    "@types/jasmine": "~2.8.9",
+    "@types/jasminewd2": "~2.0.5",
+    "@types/node": "~8.9.4",
+    "codelyzer": "^4.5.0",
+    "core-js": "^2.5.7",
+    "ci-info": "^1.6.0",
+    "jasmine-core": "^2.99.1",
+    "jasmine-spec-reporter": "^4.2.1",
+    "karma": "^3.0.0",
+    "karma-chrome-launcher": "^2.2.0",
+    "karma-coverage": "^1.1.2",
+    "karma-coverage-istanbul-reporter": "^2.0.4",
+    "karma-jasmine": "^1.1.2",
+    "karma-mocha-reporter": "^2.2.5",
+    "ng-packagr": "^4.1.0",
+    "rxjs": "^6.3.3",
+    "tslib": "^1.9.3",
+    "tslint-language-service": "^0.9.9",
+    "typescript": "~2.9.2",
+    "zone.js": "^0.8.26"
+  }
+}
