@@ -32,9 +32,7 @@
     "publish.dist": "npm publish build/dist"
   },
   "peerDependencies": {
-    "@angular/common": ">=6.0.0",
     "@angular/core": ">=6.0.0",
-    "rxjs": "^6.0.0",
     "tslib": "^1.9.0"
   },
   "devDependencies": {
