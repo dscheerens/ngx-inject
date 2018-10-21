@@ -1,6 +1,6 @@
 {
   "name": "ngx-inject",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Dependency injection utilities for Angular",
   "homepage": "https://github.com/dscheerens/ngx-inject",
   "author": "Daan Scheerens",
