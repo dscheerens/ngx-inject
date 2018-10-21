@@ -1,1 +1,1 @@
-export * from './unbound-providers';
+export * from './provider-binding';
