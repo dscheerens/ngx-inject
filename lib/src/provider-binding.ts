@@ -71,7 +71,7 @@ export function bindProvider<T, U extends T>(
     options: BindProviderOptions<U> = {}
 ): Provider {
     return (
-        !!unboundProvider ? (
+        unboundProvider ? (
             (unboundProvider as UnboundValueProvider<U>).useValue ?
                 {
                     provide: token,
@@ -99,7 +99,7 @@ export function bindProvider<T, U extends T>(
                 } :
             []
         ) :
-        !!options.default ? (
+        options.default ? (
             (options.default as UnboundValueProvider<U>).useValue ?
                 {
                     provide: token,
