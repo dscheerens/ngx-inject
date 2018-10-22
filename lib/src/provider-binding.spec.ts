@@ -207,7 +207,7 @@ class OptionalConfigModule {
                 bindProvider(STRING_VALUE,       options.stringValue, { default: { useValue: 'default-value' } }),
                 bindProvider(TestService,        options.service,     { default: { useClass: TestServiceImpl } }),
                 bindProvider(ALT_TEST_SERVICE_1, options.service,     { default: { useExisting: TestService } }),
-                bindProvider(ALT_TEST_SERVICE_2, options.service,     { default: { useFactory: () => new TestServiceImpl() } }),
+                bindProvider(ALT_TEST_SERVICE_2, options.service,     { default: { useFactory: () => new TestServiceImpl() } })
             ]
         };
     }
@@ -219,7 +219,7 @@ class MultiValueModule {
         return {
             ngModule: ValueModule,
             providers: [
-                bindProvider(NUMBER_VALUE, numberValue, { multi: true }),
+                bindProvider(NUMBER_VALUE, numberValue, { multi: true })
             ]
         };
     }
