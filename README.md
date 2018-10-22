@@ -19,7 +19,7 @@ After having installed the `ngx-inject` package you might need to update your pr
 The `ngx-inject` package is published in the [Angular Package Format](https://docs.google.com/document/d/1CZC2rcpxffTDfRDs6p1cfbmKNLA6x5O-NtkJglDaBVs/preview).
 
 Once the dependency has been installed and your build tooling configuration has been updated (if necessary), you can start using the library by importing the features you need.
-The following seconds describe how to import and use these features.
+The following sections describe how to import and use these features.
 
 ## Provider binding
 
