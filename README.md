@@ -106,9 +106,9 @@ Unbound providers can be specified using one of the following flavors:
 Typically you do not need to use one of these specific types for an unbound provider.
 Instead you should use the broader `UnboundProvider<T>` type, which is simply the type union of all of the above types.
 
-**`bindProvider` function**
+### `bindProvider` function
 
-Signature:
+**Signature:**
 
 ```typescript
 function bindProvider<T, U extends T>(
@@ -121,7 +121,7 @@ function bindProvider<T, U extends T>(
 ): Provider;
 ```
 
-Parameters:
+**Parameters:**
 
 * `token` - Token which for which the provider is to be defined.
   This can either be an instance of Angular's [`InjectionToken`](https://angular.io/api/core/InjectionToken) class or a direct reference to an (abstract) class.
@@ -135,6 +135,6 @@ Parameters:
 * `options.multi` - Whether the provider should be contribute to a "multi-provider" (resulting an array of instances when injected).
 * `options.default` - Default provider definition to use when the argument value of the `unboundProvider` parameter is `undefined`.
 
-Return value:
+**Return value:**
 
 A value that conforms to Angular's [`Provider`](https://angular.io/api/core/Provider) type, which can be used in the providers list of module metadata.
