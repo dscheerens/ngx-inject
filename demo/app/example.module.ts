@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { NgModule, ModuleWithProviders, InjectionToken, Provider } from '@angular/core';
-import { UnboundProvider, bindProvider } from 'ngx-inject'; // tslint:disable-line:no-implicit-dependencies
+import { UnboundProvider, bindProvider } from 'ngx-inject';
 
 export const EXAMPLE_MODULE_HTTP_CLIENT = new InjectionToken<HttpClient>('EXAMPLE_MODULE_HTTP_CLIENT');
 
