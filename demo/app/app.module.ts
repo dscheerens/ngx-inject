@@ -4,6 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
 import { ExampleModule, ExampleService, magicNumber } from './example.module';
+import { CounterModule } from './counter.module';
 
 export function magicNumberFactory(): number {
     return 42;
@@ -29,7 +30,8 @@ export class ExampleServiceImpl extends ExampleService {
             service: { useClass: ExampleServiceImpl },
             secretMessage: { useValue: 'pssst... ngx-inject is awesome!' },
             magicNumber: { useFactory: magicNumberFactory }
-        })
+        }),
+        CounterModule
     ],
     providers: [
         magicNumber({ useValue: 1337 })

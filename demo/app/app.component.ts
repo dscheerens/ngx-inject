@@ -2,6 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { EXAMPLE_MODULE_HTTP_CLIENT, ExampleService, SECRET_MESSAGE, MAGIC_NUMBER, REFERENCE_DATE } from './example.module';
+import { CounterService } from './counter.module';
 
 @Component({
     selector: 'app-root',
@@ -14,6 +15,7 @@ export class AppComponent {
     public readonly secretMessageOk: boolean;
     public readonly magicNumberOk: boolean;
     public readonly referenceDateOk: boolean;
+    public readonly counterValue: number;
 
     constructor(
         @Inject(EXAMPLE_MODULE_HTTP_CLIENT) httpClient: HttpClient,
@@ -21,6 +23,7 @@ export class AppComponent {
         @Inject(SECRET_MESSAGE) secretMessage: string,
         @Inject(MAGIC_NUMBER) magicNumber: number[],
         @Inject(REFERENCE_DATE) referenceDate: Date,
+        counterService: CounterService
     ) {
         this.httpClientOk = !!httpClient;
         this.exampleServiceOk = !!exampleService;
@@ -32,5 +35,7 @@ export class AppComponent {
         (console).log('secretMessage =', secretMessage);
         (console).log('magicNumber =', magicNumber);
         (console).log('referenceDate =', referenceDate);
+
+        this.counterValue = counterService.count;
     }
 }
