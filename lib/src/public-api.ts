@@ -1,2 +1,2 @@
 export * from './provider-binding';
-export { EagerProviderLoaderModule, eagerProvider } from './eager-provider-loading';
+export { EagerProviderLoaderModule, eagerLoad } from './eager-provider-loading';

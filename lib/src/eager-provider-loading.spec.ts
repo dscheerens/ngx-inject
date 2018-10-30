@@ -1,7 +1,7 @@
 import { Injectable, Injector, NgModule } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
-import { EAGER_PROVIDER, EagerProviderLoaderModule, EagerProviderLoaderService, eagerProvider } from './eager-provider-loading';
+import { EAGER_PROVIDER, EagerProviderLoaderModule, EagerProviderLoaderService, eagerLoad } from './eager-provider-loading';
 
 let testProviderInitializeCount: number;
 
@@ -16,7 +16,7 @@ class TestProvider {
 
 @NgModule({
     imports: [ EagerProviderLoaderModule ],
-    providers: [ eagerProvider(TestProvider) ]
+    providers: [ eagerLoad(TestProvider) ]
 })
 class TestModuleA {
 
@@ -24,7 +24,7 @@ class TestModuleA {
 
 @NgModule({
     imports: [ EagerProviderLoaderModule ],
-    providers: [ eagerProvider(TestProvider) ]
+    providers: [ eagerLoad(TestProvider) ]
 })
 class TestModuleB {
 

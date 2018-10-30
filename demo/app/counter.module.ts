@@ -1,5 +1,5 @@
 import { Injectable, NgModule } from '@angular/core';
-import { EagerProviderLoaderModule, eagerProvider } from 'ngx-inject';
+import { EagerProviderLoaderModule, eagerLoad } from 'ngx-inject';
 
 @Injectable({ providedIn: 'root' })
 export class CounterService {
@@ -30,7 +30,7 @@ export class CounterIncrementer {
     ],
     providers: [
         CounterIncrementer,
-        eagerProvider(CounterIncrementer)
+        eagerLoad(CounterIncrementer),
     ]
 })
 export class CounterModule {

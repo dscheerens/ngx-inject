@@ -1,5 +1,4 @@
 import { Inject, Injectable, InjectionToken, Injector, NgModule, Optional, Provider } from '@angular/core';
-import { TypeProvider, ValueProvider, ClassProvider, ExistingProvider, FactoryProvider } from '@angular/core';
 
 @Injectable({ providedIn: 'root' })
 export class EagerProviderLoaderService {
@@ -32,7 +31,7 @@ export class EagerProviderLoaderModule {
 
 }
 
-export function eagerProvider(provider: TypeProvider | ValueProvider | ClassProvider | ExistingProvider | FactoryProvider): Provider {
+export function eagerLoad(provider: Provider): Provider {
     return [
         provider,
         {
