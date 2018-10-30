@@ -38,6 +38,14 @@ class TestModuleC {
 
 }
 
+@NgModule({
+    imports: [ EagerProviderLoaderModule ],
+    providers: [ eagerLoad({ provide: 'foo', useFactory: () => new TestProvider() }) ]
+})
+class TestModuleD {
+
+}
+
 describe('eager provider loader module', () => {
 
     beforeEach(() => {
@@ -50,6 +58,16 @@ describe('eager provider loader module', () => {
         });
 
         TestBed.get(TestModuleA);
+
+        expect(testProviderInitializeCount).toBe(1);
+    });
+
+    it('supports providers other than type providers', () => {
+        TestBed.configureTestingModule({
+            imports: [ TestModuleD ]
+        });
+
+        TestBed.get(TestModuleD);
 
         expect(testProviderInitializeCount).toBe(1);
     });

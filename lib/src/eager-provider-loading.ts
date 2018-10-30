@@ -5,28 +5,29 @@ export class EagerProviderLoaderService {
 
     private readonly loadedProviders = new Set<any>();
 
-    public loadProviders(providerTokens: any[], injector: Injector): void {
-        providerTokens
+    public loadProviders(providers: Provider[], injector: Injector): void {
+        providers
+            .map((provider) => 'provide' in provider ? provider.provide : provider)
             .filter((providerToken) => !this.loadedProviders.has(providerToken))
             .forEach((providerToken) => {
                 this.loadedProviders.add(providerToken);
-                injector.get(providerToken);
+                injector.get<any>(providerToken);
             });
     }
 
 }
 
-export const EAGER_PROVIDER = new InjectionToken<any>('EAGER_PROVIDER');
+export const EAGER_PROVIDER = new InjectionToken<Provider>('EAGER_PROVIDER');
 
 @NgModule()
 export class EagerProviderLoaderModule {
 
     constructor(
         eagerProviderLoaderService: EagerProviderLoaderService,
-        @Inject(EAGER_PROVIDER) @Optional() eagerProviderTokens: any[],
+        @Inject(EAGER_PROVIDER) @Optional() eagerProviders: Provider[],
         injector: Injector
     ) {
-        eagerProviderLoaderService.loadProviders(eagerProviderTokens || [], injector);
+        eagerProviderLoaderService.loadProviders(eagerProviders || [], injector);
     }
 
 }
@@ -34,11 +35,6 @@ export class EagerProviderLoaderModule {
 export function eagerLoad(provider: Provider): Provider {
     return [
         provider,
-        {
-            provide: EAGER_PROVIDER,
-            useValue: (provider as any).provide || provider,
-            multi: true
-        }
-
-    ]
+        { provide: EAGER_PROVIDER, useValue: provider, multi: true }
+    ];
 }

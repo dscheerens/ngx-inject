@@ -22,6 +22,20 @@ export class CounterIncrementer {
     constructor(counterService: CounterService) {
         counterService.increment();
     }
+
+}
+
+@Injectable()
+export class AnotherCounterIncrementer {
+
+    constructor(counterService: CounterService) {
+        counterService.increment();
+    }
+
+}
+
+export function anotherCounterIncrementerFactory(counterService: CounterService): AnotherCounterIncrementer{
+    return new AnotherCounterIncrementer(counterService);
 }
 
 @NgModule({
@@ -29,8 +43,8 @@ export class CounterIncrementer {
         EagerProviderLoaderModule
     ],
     providers: [
-        CounterIncrementer,
         eagerLoad(CounterIncrementer),
+        eagerLoad({ provide: 'foo', useFactory: anotherCounterIncrementerFactory, deps: [ CounterService ] })
     ]
 })
 export class CounterModule {
