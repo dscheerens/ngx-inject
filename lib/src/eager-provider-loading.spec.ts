@@ -66,6 +66,18 @@ class TestModuleE {
 
 }
 
+@NgModule({
+    imports: [
+        EagerProviderLoaderModule.for([
+            TestProvider,
+            { provide: 'foo', useFactory: () => new AnotherTestProvider() }
+        ])
+    ]
+})
+class TestModuleF {
+
+}
+
 describe('eager provider loader module', () => {
 
     beforeEach(() => {
@@ -134,6 +146,16 @@ describe('eager provider loader module', () => {
         TestBed.get(TestModuleC);
 
         expect(testProviderInitializeCount).toBe(0);
+    });
+
+    it('supports eager loading via the static `EagerProviderLoaderModule.for` function', () => {
+        TestBed.configureTestingModule({
+            imports: [ TestModuleF ]
+        });
+
+        TestBed.get(TestModuleF);
+
+        expect(testProviderInitializeCount).toBe(2);
     });
 
 });

@@ -1,4 +1,4 @@
-import { Inject, Injectable, InjectionToken, Injector, NgModule, Optional, Provider } from '@angular/core';
+import { Inject, Injectable, InjectionToken, Injector, ModuleWithProviders, NgModule, Optional, Provider } from '@angular/core';
 
 @Injectable({ providedIn: 'root' })
 export class EagerProviderLoaderService {
@@ -37,6 +37,16 @@ export class EagerProviderLoaderModule {
         injector: Injector
     ) {
         eagerProviderLoaderService.loadProviders(eagerProviders || [], injector);
+    }
+
+    public static for(provider: Provider): ModuleWithProviders {
+        return {
+            ngModule: EagerProviderLoaderModule,
+            providers: [
+                eagerLoad(provider)
+            ]
+        };
+
     }
 
 }
