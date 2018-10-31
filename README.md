@@ -225,7 +225,7 @@ import { EagerProviderLoaderModule, eagerLoad } from 'ngx-inject';
 export class AppModule { }
 ```
 
-> **Both the `eagerLoad` and `EagerProviderLoaderModule.for` are compatible with Angular's AoT compiler.**
+> **Both the `eagerLoad` and `EagerProviderLoaderModule.for` functions are compatible with Angular's AoT compiler.**
 
 ### Lazy module loading support
 
