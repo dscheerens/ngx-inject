@@ -6,8 +6,7 @@ export class EagerProviderLoaderService {
     private readonly loadedProviders = new Set<any>();
 
     public loadProviders(providers: Provider[], injector: Injector): void {
-        providers
-            .map((provider) => 'provide' in provider ? provider.provide : provider)
+        extractProviderTokens(providers)
             .filter((providerToken) => !this.loadedProviders.has(providerToken))
             .forEach((providerToken) => {
                 this.loadedProviders.add(providerToken);
@@ -15,6 +14,16 @@ export class EagerProviderLoaderService {
             });
     }
 
+}
+
+function extractProviderTokens(provider: Provider): any[] {
+    if (Array.isArray(provider)) {
+        return provider.reduce((result, p) => [...result, ...extractProviderTokens(p)], []);
+    } else if ('provide' in provider) {
+        return [ provider.provide ];
+    } else {
+        return [ provider ];
+    }
 }
 
 export const EAGER_PROVIDER = new InjectionToken<Provider>('EAGER_PROVIDER');

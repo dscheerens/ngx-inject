@@ -34,7 +34,7 @@ export class AnotherCounterIncrementer {
 
 }
 
-export function anotherCounterIncrementerFactory(counterService: CounterService): AnotherCounterIncrementer{
+export function anotherCounterIncrementerFactory(counterService: CounterService): AnotherCounterIncrementer {
     return new AnotherCounterIncrementer(counterService);
 }
 
@@ -43,7 +43,9 @@ export function anotherCounterIncrementerFactory(counterService: CounterService)
         EagerProviderLoaderModule
     ],
     providers: [
-        eagerLoad(CounterIncrementer),
+        eagerLoad([
+            CounterIncrementer,
+        ]),
         eagerLoad({ provide: 'foo', useFactory: anotherCounterIncrementerFactory, deps: [ CounterService ] })
     ]
 })

@@ -14,6 +14,15 @@ class TestProvider {
 
 }
 
+@Injectable()
+class AnotherTestProvider {
+
+    constructor() {
+        testProviderInitializeCount++;
+    }
+
+}
+
 @NgModule({
     imports: [ EagerProviderLoaderModule ],
     providers: [ eagerLoad(TestProvider) ]
@@ -24,7 +33,7 @@ class TestModuleA {
 
 @NgModule({
     imports: [ EagerProviderLoaderModule ],
-    providers: [ eagerLoad(TestProvider) ]
+    providers: [ eagerLoad(TestProvider), eagerLoad(AnotherTestProvider) ]
 })
 class TestModuleB {
 
@@ -46,6 +55,17 @@ class TestModuleD {
 
 }
 
+@NgModule({
+    imports: [ EagerProviderLoaderModule ],
+    providers: [ eagerLoad([
+        TestProvider,
+        { provide: 'foo', useFactory: () => new AnotherTestProvider() }
+    ]) ]
+})
+class TestModuleE {
+
+}
+
 describe('eager provider loader module', () => {
 
     beforeEach(() => {
@@ -59,7 +79,7 @@ describe('eager provider loader module', () => {
 
         TestBed.get(TestModuleA);
 
-        expect(testProviderInitializeCount).toBe(1);
+        expect(testProviderInitializeCount).toBe(2);
     });
 
     it('supports providers other than type providers', () => {
@@ -70,6 +90,16 @@ describe('eager provider loader module', () => {
         TestBed.get(TestModuleD);
 
         expect(testProviderInitializeCount).toBe(1);
+    });
+
+    it('supports arrays of providers', () => {
+        TestBed.configureTestingModule({
+            imports: [ TestModuleE ]
+        });
+
+        TestBed.get(TestModuleE);
+
+        expect(testProviderInitializeCount).toBe(2);
     });
 
     it('never loads a provider more than once', () => {
@@ -86,14 +116,14 @@ describe('eager provider loader module', () => {
         injector.get(TestModuleA);
         injector.get(TestModuleB);
 
-        expect(testProviderInitializeCount).toBe(1);
+        expect(testProviderInitializeCount).toBe(2);
 
         const loader1 = new EagerProviderLoaderModule(eagerProviderLoaderService, providers, injector);
         const loader2 = new EagerProviderLoaderModule(eagerProviderLoaderService, providers, injector);
 
         expect(loader1).toBeDefined();
         expect(loader2).toBeDefined();
-        expect(testProviderInitializeCount).toBe(1);
+        expect(testProviderInitializeCount).toBe(2);
     });
 
     it('does not break when no eager provider tokens are present', () => {
