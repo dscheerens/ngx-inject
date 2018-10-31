@@ -6,6 +6,7 @@ This package provides a variety of utility functions and types related to Angula
 It ships with the following features:
 
 * [Provider binding](#provider-binding)
+* [Eager provider loading](#eager-provider-loading)
 
 ## Installation and usage
 
@@ -30,7 +31,7 @@ An unbound provider is represented using the `UnboundProvider<T>` type which has
 To convert an unbound provider into a full provider that can be used by Angular's dependency injection framework it has to be bound to a token.
 This is done using the `bindProvider` function which takes a token and an unbound provider as arguments and combines them to yield a [`Provider`](https://angular.io/api/core/Provider) instance.
 
-> The `bindProvider` function is compatible with Angular's AOT compiler, so it can safely be used without running into _function calls are not supported_ errors or injected dependencies being `undefined` at runtime.
+> The `bindProvider` function is compatible with Angular's AoT compiler, so it can safely be used without running into _function calls are not supported_ errors or injected dependencies being `undefined` at runtime.
 
 Together with the `bindProvider` function the unbound provider concept offers a nice method for modules to specify dependencies that need to be provided outside of the module (e.g. configuration) in a typesafe manner.
 One way of defining these dependencies is by creating a static function in your module that returns a `ModuleWithProviders` object.
@@ -73,7 +74,7 @@ As can be seen from this example: a consumer of `MyModule` has to specify how to
 This construct makes it explicit what dependencies (in the form of providers) are needed by a module, without consumers having to know exactly which tokens need to be provided.
 Also, since the `bindProvider` function and `UnboundProvider` model are fully typesafe a consumer cannot make the mistake of providing a value of an incorrect type.
 
-```Typescript
+```typescript
 MyModule.withConfiguration({ useValue: 5 }); // <-- TYPE ERROR!
 MyModule.withConfiguration({ useValue: { importantData: 'hmmm pie!' }); // OK :)
 ```
@@ -138,3 +139,106 @@ function bindProvider<T, U extends T>(
 **Return value:**
 
 A value that conforms to Angular's [`Provider`](https://angular.io/api/core/Provider) type, which can be used in the providers list of module metadata.
+
+## Eager provider loading
+
+This feature enables your application to eager load providers if necessary.
+By default Angular loads all providers in a lazy manner, i.e. only whenever other components or services that are instantiated (via Angular's dependency injection framework) require them as a dependency.
+While this is actually a good thing and is desirable for the majority of the cases, sometimes you might have a valid reason to have your provider(s) loaded directly.
+This is the case in particular for providers that play an active role in the background of your application, but are never referenced by other components or providers.
+For more information when this is useful and the rationale for this package see the following article: [Eager loading in Angular 2](https://github.com/dscheerens/ngx-eager-provider-loader/blob/master/eager-loading-in-angular-2.md)
+
+### Eager loading API
+
+To enable eager loading for your provider(s), first find the `@NgModule` class in which the provider should be loaded.
+Usually you'll want to set this up in your application root module (often called `AppModule`).
+Once you've found the module in which the provider should be loaded, import the `EagerProviderLoaderModule`:
+
+```typescript
+import { EagerProviderLoaderModule } from 'ngx-inject';
+
+@NgModule({
+    imports: [ EagerProviderLoaderModule ]
+})
+export class AppModule { }
+```
+
+By importing the `EagerProviderLoaderModule` your application will load all providers on startup that have been registered as eagerly loaded providers.
+Although not strictly necessary, it is best to import this module in every module in which you mark providers for eager loading.
+This improves the reusability of those modules, since they don't depend on other modules to import the `EagerProviderLoaderModule`.
+
+After having imported the `EagerProviderLoaderModule`, you need to define which providers you want to have loaded eagerly.
+This is done using the `eagerLoad` function, which you simply _wrap_ around the provider(s) that should be eagerly loaded, for example:
+
+```typescript
+import { EagerProviderLoaderModule, eagerLoad } from 'ngx-inject';
+
+@NgModule({
+    imports: [ EagerProviderLoaderModule ],
+    providers: [
+        eagerLoad(AppTitleUpdater)
+    ]
+})
+export class AppModule { }
+```
+
+The `eagerLoad` function takes a `Provider` as input and returns a new provider instead.
+That new provider is simply an array of two providers:
+* The original input provider
+* A special marker provider used by the `EagerProviderLoaderModule` to discover which providers need to be eagerly loaded.
+
+Since Angular's `Provider` type also supports arrays (of providers) you can fold multiple `eagerLoad` calls into one.
+This is shown in following example:
+
+```typescript
+import { EagerProviderLoaderModule, eagerLoad } from 'ngx-inject';
+
+@NgModule({
+    imports: [ EagerProviderLoaderModule ],
+    providers: [
+        eagerLoad([
+            AppTitleUpdater,
+            ConsoleLogger,
+            LocalizationInitializer
+        ])
+    ]
+})
+export class AppModule { }
+```
+
+The pattern of importing the `EagerProviderLoaderModule` within a module, together with one or more `eagerLoad` function calls is quite common.
+Because of this common pattern a convenience method has been added to combine this all into a single function: the static `for` function of the `EagerProviderLoaderModule` class.
+Using this function the previous example can be rewritten as:
+
+```typescript
+import { EagerProviderLoaderModule, eagerLoad } from 'ngx-inject';
+
+@NgModule({
+    imports: [
+        EagerProviderLoaderModule.for([
+            AppTitleUpdater,
+            ConsoleLogger,
+            LocalizationInitializer
+        ])
+    ]
+})
+export class AppModule { }
+```
+
+> **Both the `eagerLoad` and `EagerProviderLoaderModule.for` are compatible with Angular's AoT compiler.**
+
+### Lazy module loading support
+
+The eager provider loader package has support for lazy loaded modules.
+However, before using eager provider loading for lazy loaded modules ask yourself whether it actually makes sense that the provider should only be loaded when the module itself is loaded.
+In most cases I expect that the provider must be loaded on application startup anyway.
+If so, you can simply move the eager loading registration to the module that is being used to bootstrap the application (or to another module that is transitively imported by the root module).
+
+If you still feel that you need eager provider loading for a lazy loaded module, then you can use it in the same way as you would for modules that get loaded on application startup.
+Just don't forget to import the `EagerProviderLoaderModule` within these lazy loaded modules.
+
+Note that for providers defined in lazy loaded modules there is a small difference for eager loaded providers compared to normal providers.
+Services defined in lazy loaded modules might be [instantiated multiple times](https://angular.io/guide/providers#limiting-provider-scope-by-lazy-loading-modules) by Angular itself.
+The eager provider loader, however, will only load providers marked for eager loading once.
+If a provider has already been eagerly loaded, then the `EagerProviderLoaderModule` will do not this again for the same provider.
+This ensures that the service defined by the provider is only instantiated once.
