@@ -27,33 +27,25 @@ class AnotherTestProvider {
     imports: [ EagerProviderLoaderModule ],
     providers: [ eagerLoad(TestProvider) ]
 })
-class TestModuleA {
-
-}
+class TestModuleA { }
 
 @NgModule({
     imports: [ EagerProviderLoaderModule ],
     providers: [ eagerLoad(TestProvider), eagerLoad(AnotherTestProvider) ]
 })
-class TestModuleB {
-
-}
+class TestModuleB { }
 
 @NgModule({
     imports: [ EagerProviderLoaderModule ],
     providers: [ ]
 })
-class TestModuleC {
-
-}
+class TestModuleC { }
 
 @NgModule({
     imports: [ EagerProviderLoaderModule ],
     providers: [ eagerLoad({ provide: 'foo', useFactory: () => new TestProvider() }) ]
 })
-class TestModuleD {
-
-}
+class TestModuleD { }
 
 @NgModule({
     imports: [ EagerProviderLoaderModule ],
@@ -62,9 +54,7 @@ class TestModuleD {
         { provide: 'foo', useFactory: () => new AnotherTestProvider() }
     ]) ]
 })
-class TestModuleE {
-
-}
+class TestModuleE { }
 
 @NgModule({
     imports: [
@@ -74,9 +64,7 @@ class TestModuleE {
         ])
     ]
 })
-class TestModuleF {
-
-}
+class TestModuleF { }
 
 describe('eager provider loader module', () => {
 
