@@ -17,7 +17,8 @@ npm install --save ngx-inject
 ```
 
 After having installed the `ngx-inject` package you might need to update your project configuration depending on the build tools you use, e.g. _SystemJS_ or _Karma_.
-The `ngx-inject` package is published in the [Angular Package Format](https://docs.google.com/document/d/1CZC2rcpxffTDfRDs6p1cfbmKNLA6x5O-NtkJglDaBVs/preview).
+The `ngx-inject` package is published in the [Angular Package Format](https://docs.google.com/document/d/1CZC2rcpxffTDfRDs6p1cfbmKNLA6x5O-NtkJglDaBVs/preview), so it should work with most build tools.
+If you use the Angular CLI then you don't need to perform any additional configuration steps.
 
 Once the dependency has been installed and your build tooling configuration has been updated (if necessary), you can start using the library by importing the features you need.
 The following sections describe how to import and use these features.
@@ -81,7 +82,9 @@ MyModule.withConfiguration({ useValue: { importantData: 'hmmm pie!' }); // OK :)
 
 ## Provider binding API
 
-Unbound providers can be specified using one of the following flavors:
+Unbound providers can be represented using the `UnboundProvider<T>` type.
+The type parameter `T` is the type of value that will be resolved by the provider.
+Under the hood, the `UnboundProvider<T>` type, is simply the union of the following types:
 
 * `UnboundValueProvider` - Uses the value of the `useValue` field for injection.
 
@@ -103,9 +106,6 @@ Unbound providers can be specified using one of the following flavors:
 
   The factory function can take an arbitrary number of parameters.
   It is invoked with resolved values of tokens in the `deps` field.
-
-Typically you do not need to use one of these specific types for an unbound provider.
-Instead you should use the broader `UnboundProvider<T>` type, which is simply the type union of all of the above types.
 
 ### `bindProvider` function
 
