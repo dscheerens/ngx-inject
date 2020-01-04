@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { EXAMPLE_MODULE_HTTP_CLIENT, ExampleService, SECRET_MESSAGE, MAGIC_NUMBER, REFERENCE_DATE } from './example.module';
@@ -6,7 +6,8 @@ import { CounterService } from './counter.module';
 
 @Component({
     selector: 'app-root',
-    templateUrl: 'app.component.html'
+    templateUrl: './app.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent {
 

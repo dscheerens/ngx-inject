@@ -37,11 +37,13 @@ export class EagerProviderLoaderService {
 function extractProviderTokens(provider: Provider): any[] {
     if (Array.isArray(provider)) {
         return provider.reduce((result, p) => [...result, ...extractProviderTokens(p)], []);
-    } else if ('provide' in provider) {
-        return [ provider.provide ];
-    } else {
-        return [ provider ];
     }
+
+    if ('provide' in provider) {
+        return [ provider.provide ];
+    }
+
+    return [ provider ];
 }
 
 /** Injection token used for registering providers which should be eagerly loaded (via the `EagerProviderLoaderModule`) */

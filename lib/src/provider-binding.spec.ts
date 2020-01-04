@@ -1,5 +1,6 @@
 import { InjectionToken, ModuleWithProviders, NgModule, Injector } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+
 import { UnboundProvider, bindProvider } from './provider-binding';
 
 describe('bindProvider() function', () => {

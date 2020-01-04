@@ -3,7 +3,7 @@
     "dest": "build/dist",
     "lib": {
         "entryFile": "lib/public-api.ts",
-        "umdId": "exampleModule",
+        "umdId": "ngxInject",
         "umdModuleIds": {}
     }
 }
