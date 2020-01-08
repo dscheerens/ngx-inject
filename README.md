@@ -86,11 +86,18 @@ Unbound providers can be represented using the `UnboundProvider<T>` type.
 The type parameter `T` is the type of value that will be resolved by the provider.
 Under the hood, the `UnboundProvider<T>` type, is simply the union of the following types:
 
+* `UnboundTypeProvider` - Uses the specified class to instantiate a value for injection.
+  The instance will be reused for subsequent usages of the same class as `UnboundTypeProvider`.
+  In addition the class itself will also be made available as token for injection.
+
+  **Model Definition:** `UnboundTypeProvider<T> = Type<T>`
+
 * `UnboundValueProvider` - Uses the value of the `useValue` field for injection.
 
   **Model Definition:** `UnboundValueProvider<T> { useValue: T }`
 
 * `UnboundClassProvider` - Creates an instance of the specified class as injection value.
+  Note that unlike `UnboundTypeProvider` multiple uses of the same class as `UnboundClassProvider` will also result in multiple instances of that class.
 
   **Model Definition:** `UnboundClassProvider<T> { useClass: Type<T>;}`
 

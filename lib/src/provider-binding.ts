@@ -10,6 +10,9 @@ export type InjectableType<T> = Function & { prototype: T }; // tslint:disable-l
 /** Type representing valid typesafe token types for provider binding. */
 export type Token<T> = InjectableType<T> | InjectionToken<T>;
 
+/** Definition (without token binding) for providers that will create a singleton instance of the specified class for injection. */
+export type UnboundTypeProvider<T> = Type<T>;
+
 /** Definition (without token binding) for providers that use the specified value for injection. */
 export interface UnboundValueProvider<T> {
     /** The value to inject. */
@@ -46,7 +49,12 @@ export interface UnboundFactoryProvider<T> {
 /**
  * Typesafe representation for provider definitions which are not bound to a specific token (i.e. a definition wihtout `provide` property).
  */
-export type UnboundProvider<T> = UnboundValueProvider<T> | UnboundClassProvider<T> | UnboundExistingProvider<T> | UnboundFactoryProvider<T>;
+export type UnboundProvider<T> =
+    UnboundTypeProvider<T> |
+    UnboundValueProvider<T> |
+    UnboundClassProvider<T> |
+    UnboundExistingProvider<T> |
+    UnboundFactoryProvider<T>;
 
 /** Extra binding options for the `bindProvider` function. */
 export interface BindProviderOptions<U> {
@@ -72,6 +80,15 @@ export function bindProvider<T, U extends T>(
 ): Provider {
     return (
         unboundProvider ? (
+            (unboundProvider as UnboundTypeProvider<U>).apply ?
+                [
+                    unboundProvider,
+                    {
+                        provide: token,
+                        useExisting: unboundProvider,
+                        multi: options.multi
+                    }
+                ] :
             (unboundProvider as UnboundValueProvider<U>).useValue ?
                 {
                     provide: token,
@@ -100,6 +117,15 @@ export function bindProvider<T, U extends T>(
             []
         ) :
         options.default ? (
+            (options.default as UnboundTypeProvider<U>).apply  ?
+                [
+                    options.default,
+                    {
+                        provide: token,
+                        useExisting: options.default,
+                        multi: options.multi
+                    }
+                ] :
             (options.default as UnboundValueProvider<U>).useValue ?
                 {
                     provide: token,

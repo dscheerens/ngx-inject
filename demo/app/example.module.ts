@@ -20,12 +20,21 @@ export function defaultReferenceDateFactory(): Date {
     return new Date();
 }
 
+export abstract class NumberStorage {
+    public abstract number: number;
+}
+
+export class L33tNumberStorage {
+    public number = 1337;
+}
+
 interface ExampleModuleOptions {
     httpClient: UnboundProvider<HttpClient>;
     service: UnboundProvider<ExampleService>;
     secretMessage: UnboundProvider<string>;
     magicNumber: UnboundProvider<number>;
     referenceDate?: UnboundProvider<Date>;
+    numberStorage: UnboundProvider<NumberStorage>;
 }
 
 @NgModule({})
@@ -39,7 +48,8 @@ export class ExampleModule {
                 bindProvider(ExampleService, options.service),
                 bindProvider(SECRET_MESSAGE, options.secretMessage),
                 bindProvider(MAGIC_NUMBER, options.magicNumber, { multi: true }),
-                bindProvider(REFERENCE_DATE, options.referenceDate, { default: { useFactory: defaultReferenceDateFactory } })
+                bindProvider(REFERENCE_DATE, options.referenceDate, { default: { useFactory: defaultReferenceDateFactory } }),
+                bindProvider(NumberStorage, options.numberStorage)
             ]
         };
     }

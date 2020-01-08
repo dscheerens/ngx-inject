@@ -5,6 +5,21 @@ import { UnboundProvider, bindProvider } from './provider-binding';
 
 describe('bindProvider() function', () => {
 
+    it('can bind unbound type providers', () => {
+        TestBed.configureTestingModule({
+            imports: [
+                ServiceModule.withConfig(TestServiceImpl)
+            ]
+        });
+
+        const injector: Injector = TestBed.get(Injector);
+
+        const service = injector.get<TestService>(TestService as any);
+
+        expect(service.transform('bar')).toBe('[BAR]');
+        expect(injector.get(TestServiceImpl) === service).toBe(true);
+    });
+
     it('can bind unbound value providers', () => {
         TestBed.configureTestingModule({
             imports: [
@@ -136,14 +151,23 @@ describe('bindProvider() function', () => {
         const injector: Injector = TestBed.get(Injector);
 
         const stringValue = injector.get(STRING_VALUE, null!);
-        const service = injector.get<TestService>(TestService as any, null!);
+        const service1 = injector.get<TestService>(TestService as any, null!);
+        const service2 = injector.get<TestService2>(TestService2 as any, null!);
+        const serviceImpl = injector.get(TestServiceImpl);
         const altService1 = injector.get(ALT_TEST_SERVICE_1, null!);
         const altService2 = injector.get(ALT_TEST_SERVICE_2, null!);
 
         expect(stringValue).toBe('default-value');
-        expect(service).not.toBeNull();
-        expect(service).toBeDefined();
-        expect(service.transform('hey')).toBe('[HEY]');
+        expect(service1).not.toBeNull();
+        expect(service1).toBeDefined();
+        expect(service1.transform('hey')).toBe('[HEY]');
+        expect(service2).not.toBeNull();
+        expect(service2).toBeDefined();
+        expect(service2.transform('hey')).toBe('[HEY]');
+        expect(serviceImpl).not.toBeNull();
+        expect(serviceImpl).toBeDefined();
+        expect(service1 === service2).toBe(false);
+        expect(service2 === serviceImpl).toBe(true);
         expect(altService1).not.toBeNull();
         expect(altService2).not.toBeNull();
     });
@@ -177,6 +201,9 @@ abstract class TestService {
     public abstract transform(input: string): string;
 }
 
+abstract class TestService2 extends TestService {
+}
+
 class TestServiceImpl extends TestService {
     public transform(input: string): string {
         return `[${input.toUpperCase()}]`;
@@ -207,6 +234,7 @@ class OptionalConfigModule {
                 bindProvider(NUMBER_VALUE,       options.numberValue),
                 bindProvider(STRING_VALUE,       options.stringValue, { default: { useValue: 'default-value' } }),
                 bindProvider(TestService,        options.service,     { default: { useClass: TestServiceImpl } }),
+                bindProvider(TestService2,       options.service,     { default: TestServiceImpl }),
                 bindProvider(ALT_TEST_SERVICE_1, options.service,     { default: { useExisting: TestService } }),
                 bindProvider(ALT_TEST_SERVICE_2, options.service,     { default: { useFactory: () => new TestServiceImpl() } })
             ]
