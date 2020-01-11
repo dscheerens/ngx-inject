@@ -34,7 +34,8 @@ This is done using the `bindProvider` function which takes a token and an unboun
 
 > The `bindProvider` function is compatible with Angular's AoT compiler, so it can safely be used without running into _function calls are not supported_ errors or injected dependencies being `undefined` at runtime.
 
-Together with the `bindProvider` function the unbound provider concept offers a nice method for modules to specify dependencies that need to be provided outside of the module (e.g. configuration) in a typesafe manner.
+Together with the `bindProvider` function the unbound provider concept offers a nice method for modules to specify dependencies that need to be provided outside of the module (e.g. configuration) in a type-safe manner.
+You can read more about this concept in the article [Explicit and type-safe Angular module configuration](https://codefoundry.nl/blogs/explicit-and-type-safe-angular-module-configuration).
 One way of defining these dependencies is by creating a static function in your module that returns a `ModuleWithProviders` object.
 This is illustrated in the following example:
 
@@ -73,7 +74,7 @@ export class MyModule {
 
 As can be seen from this example: a consumer of `MyModule` has to specify how to resolve a value for an instance of `MyConfig`, while the the module itself takes care of binding it to the correct token (so it will later be available for injection in the `MyService` constructor).
 This construct makes it explicit what dependencies (in the form of providers) are needed by a module, without consumers having to know exactly which tokens need to be provided.
-Also, since the `bindProvider` function and `UnboundProvider` model are fully typesafe a consumer cannot make the mistake of providing a value of an incorrect type.
+Also, since the `bindProvider` function and `UnboundProvider` model are fully type-safe a consumer cannot make the mistake of providing a value of an incorrect type.
 
 ```typescript
 MyModule.withConfiguration({ useValue: 5 }); // <-- TYPE ERROR!
