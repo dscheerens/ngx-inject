@@ -40,7 +40,7 @@ interface ExampleModuleOptions {
 @NgModule({})
 export class ExampleModule {
 
-    public static withConfig(options: ExampleModuleOptions): ModuleWithProviders {
+    public static withConfig(options: ExampleModuleOptions): ModuleWithProviders<ExampleModule> {
         return {
             ngModule: ExampleModule,
             providers: [

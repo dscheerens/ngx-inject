@@ -17,6 +17,7 @@
                     },
                     "configurations": {
                         "production": {
+                            "tsConfig": "lib/tsconfig.lib.prod.json",
                             "project": "ng-package.json"
                         }
                     }
@@ -33,6 +34,7 @@
                 "lint": {
                     "builder": "@angular-devkit/build-angular:tslint",
                     "options": {
+                        "format": "stylish",
                         "tsConfig": [
                             "lib/tsconfig.lib.json",
                             "lib/tsconfig.spec.json"

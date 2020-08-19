@@ -12,7 +12,7 @@ describe('bindProvider() function', () => {
             ]
         });
 
-        const injector: Injector = TestBed.get(Injector);
+        const injector: Injector = TestBed.inject(Injector);
 
         const service = injector.get<TestService>(TestService as any);
 
@@ -30,7 +30,7 @@ describe('bindProvider() function', () => {
             ]
         });
 
-        const injector: Injector = TestBed.get(Injector);
+        const injector: Injector = TestBed.inject(Injector);
 
         const numberValue = injector.get(NUMBER_VALUE);
         const stringValue = injector.get(STRING_VALUE);
@@ -46,7 +46,7 @@ describe('bindProvider() function', () => {
             ]
         });
 
-        const injector: Injector = TestBed.get(Injector);
+        const injector: Injector = TestBed.inject(Injector);
 
         const service = injector.get<TestService>(TestService as any);
 
@@ -69,7 +69,7 @@ describe('bindProvider() function', () => {
             ]
         });
 
-        const injector: Injector = TestBed.get(Injector);
+        const injector: Injector = TestBed.inject(Injector);
 
         const service = injector.get<TestService>(TestService as any);
         const numberValue = injector.get(NUMBER_VALUE);
@@ -97,7 +97,7 @@ describe('bindProvider() function', () => {
             ]
         });
 
-        const injector: Injector = TestBed.get(Injector);
+        const injector: Injector = TestBed.inject(Injector);
 
         const numberValue = injector.get(NUMBER_VALUE);
         const stringValue = injector.get(STRING_VALUE);
@@ -117,7 +117,7 @@ describe('bindProvider() function', () => {
             ]
         });
 
-        const injector: Injector = TestBed.get(Injector);
+        const injector: Injector = TestBed.inject(Injector);
 
         const numberValues = injector.get<number[]>(NUMBER_VALUE);
 
@@ -134,7 +134,7 @@ describe('bindProvider() function', () => {
             ]
         });
 
-        const injector: Injector = TestBed.get(Injector);
+        const injector: Injector = TestBed.inject(Injector);
 
         const numberValue = injector.get(NUMBER_VALUE, null!);
 
@@ -148,7 +148,7 @@ describe('bindProvider() function', () => {
             ]
         });
 
-        const injector: Injector = TestBed.get(Injector);
+        const injector: Injector = TestBed.inject(Injector);
 
         const stringValue = injector.get(STRING_VALUE, null!);
         const service1 = injector.get<TestService>(TestService as any, null!);
@@ -186,7 +186,7 @@ interface ValueModuleOptions {
 
 @NgModule()
 class ValueModule {
-    public static withConfig(options: ValueModuleOptions): ModuleWithProviders {
+    public static withConfig(options: ValueModuleOptions): ModuleWithProviders<ValueModule> {
         return {
             ngModule: ValueModule,
             providers: [
@@ -212,7 +212,7 @@ class TestServiceImpl extends TestService {
 
 @NgModule()
 class ServiceModule {
-    public static withConfig(service: UnboundProvider<TestService>): ModuleWithProviders {
+    public static withConfig(service: UnboundProvider<TestService>): ModuleWithProviders<ServiceModule> {
         return {
             ngModule: ServiceModule,
             providers: [
@@ -227,7 +227,9 @@ const ALT_TEST_SERVICE_2 = new InjectionToken<TestService>('ALT_TEST_SERVICE_2')
 
 @NgModule()
 class OptionalConfigModule {
-    public static withConfig(options: Partial<ValueModuleOptions> & { service?: UnboundProvider<TestService> }): ModuleWithProviders {
+    public static withConfig(
+        options: Partial<ValueModuleOptions> & { service?: UnboundProvider<TestService> }
+    ): ModuleWithProviders<OptionalConfigModule> {
         return {
             ngModule: OptionalConfigModule,
             providers: [
@@ -244,7 +246,7 @@ class OptionalConfigModule {
 
 @NgModule()
 class MultiValueModule {
-    public static withConfig(numberValue: UnboundProvider<number>): ModuleWithProviders {
+    public static withConfig(numberValue: UnboundProvider<number>): ModuleWithProviders<MultiValueModule> {
         return {
             ngModule: ValueModule,
             providers: [

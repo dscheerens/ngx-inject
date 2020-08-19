@@ -77,7 +77,7 @@ describe('eager provider loader module', () => {
             imports: [ TestModuleA, TestModuleB, TestModuleC ]
         });
 
-        TestBed.get(TestModuleA);
+        TestBed.inject(TestModuleA);
 
         expect(testProviderInitializeCount).toBe(2);
     });
@@ -87,7 +87,7 @@ describe('eager provider loader module', () => {
             imports: [ TestModuleD ]
         });
 
-        TestBed.get(TestModuleD);
+        TestBed.inject(TestModuleD);
 
         expect(testProviderInitializeCount).toBe(1);
     });
@@ -97,7 +97,7 @@ describe('eager provider loader module', () => {
             imports: [ TestModuleE ]
         });
 
-        TestBed.get(TestModuleE);
+        TestBed.inject(TestModuleE);
 
         expect(testProviderInitializeCount).toBe(2);
     });
@@ -107,7 +107,7 @@ describe('eager provider loader module', () => {
             imports: [ TestModuleA, TestModuleB, TestModuleC ]
         });
 
-        const injector: Injector = TestBed.get(Injector);
+        const injector: Injector = TestBed.inject(Injector);
         const eagerProviderLoaderService = injector.get(EagerProviderLoaderService);
         const providers = injector.get<any[]>(EAGER_PROVIDER);
 
@@ -131,7 +131,7 @@ describe('eager provider loader module', () => {
             imports: [ TestModuleC ]
         });
 
-        TestBed.get(TestModuleC);
+        TestBed.inject(TestModuleC);
 
         expect(testProviderInitializeCount).toBe(0);
     });
@@ -141,7 +141,7 @@ describe('eager provider loader module', () => {
             imports: [ TestModuleF ]
         });
 
-        TestBed.get(TestModuleF);
+        TestBed.inject(TestModuleF);
 
         expect(testProviderInitializeCount).toBe(2);
     });

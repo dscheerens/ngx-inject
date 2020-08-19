@@ -74,7 +74,7 @@ export class EagerProviderLoaderModule {
      * @returns          A `ModuleWithProviders` definition for the `EagerProviderLoaderModule` and the specified provider(s) which are
      *                   also setup for eager loading.
      */
-    public static for(provider: Provider): ModuleWithProviders {
+    public static for(provider: Provider): ModuleWithProviders<EagerProviderLoaderModule> {
         return {
             ngModule: EagerProviderLoaderModule,
             providers: [

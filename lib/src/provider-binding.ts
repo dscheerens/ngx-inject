@@ -80,12 +80,12 @@ export function bindProvider<T, U extends T>(
 ): Provider {
     return (
         unboundProvider ? (
-            (unboundProvider as UnboundTypeProvider<U>).apply ?
+            (unboundProvider as { apply?: unknown }).apply ?
                 [
                     unboundProvider,
                     {
                         provide: token,
-                        useExisting: unboundProvider,
+                        useExisting: unboundProvider as UnboundTypeProvider<U>,
                         multi: options.multi
                     }
                 ] :
@@ -107,7 +107,7 @@ export function bindProvider<T, U extends T>(
                     useExisting: (unboundProvider as UnboundExistingProvider<U>).useExisting,
                     multi: options.multi
                 } :
-            (unboundProvider as UnboundFactoryProvider<U>).useFactory ?
+            (unboundProvider as { useFactory?: unknown }).useFactory ?
                 {
                     provide: token,
                     useFactory: (unboundProvider as UnboundFactoryProvider<U>).useFactory, // tslint:disable-line:no-unbound-method
@@ -117,12 +117,12 @@ export function bindProvider<T, U extends T>(
             []
         ) :
         options.default ? (
-            (options.default as UnboundTypeProvider<U>).apply  ?
+            (options.default as { apply?: unknown }).apply  ?
                 [
                     options.default,
                     {
                         provide: token,
-                        useExisting: options.default,
+                        useExisting: options.default as UnboundTypeProvider<U>,
                         multi: options.multi
                     }
                 ] :
@@ -144,7 +144,7 @@ export function bindProvider<T, U extends T>(
                     useExisting: (options.default as UnboundExistingProvider<U>).useExisting,
                     multi: options.multi
                 } :
-            (options.default as UnboundFactoryProvider<U>).useFactory ?
+            (options.default as { useFactory?: unknown }).useFactory ?
                 {
                     provide: token,
                     useFactory: (options.default as UnboundFactoryProvider<U>).useFactory, // tslint:disable-line:no-unbound-method

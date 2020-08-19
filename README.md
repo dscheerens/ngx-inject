@@ -1,4 +1,4 @@
-[![Build Status](https://api.travis-ci.org/dscheerens/ngx-inject.svg?branch=master)](https://travis-ci.org/dscheerens/ngx-inject) [![NPM Version](https://img.shields.io/npm/v/ngx-inject.svg)](https://www.npmjs.com/package/ngx-inject)
+[![Build Status](https://travis-ci.com/dscheerens/ngx-inject.svg?branch=master)](https://travis-ci.com/dscheerens/ngx-inject) [![NPM Version](https://img.shields.io/npm/v/ngx-inject.svg)](https://www.npmjs.com/package/ngx-inject)
 
 # `ngx-inject` - dependency injection utilities for Angular
 
@@ -22,6 +22,17 @@ If you use the Angular CLI then you don't need to perform any additional configu
 
 Once the dependency has been installed and your build tooling configuration has been updated (if necessary), you can start using the library by importing the features you need.
 The following sections describe how to import and use these features.
+
+
+### Angular version compatibility matrix
+
+Use the compatibility matrix below to determine which version of this module works with your project's Angular version.
+
+| Library version          | Angular version |
+| ------------------------ | --------------- |
+| `ngx-inject` - **1.x.x** | >= **6.0.0**    |
+| `ngx-inject` - **2.x.x** | >= **8.0.0**    |
+| `ngx-inject` - **3.x.x** | >= **10.0.0**   |
 
 ## Provider binding
 
