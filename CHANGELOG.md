@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.0.0](https://github.com/dscheerens/ngx-inject/compare/v2.0.0...v3.0.0) (2020-08-19)
+
+
+### ⚠ BREAKING CHANGES
+
+* due to the updated dependencies this package now requires at least Angular 10.
+
+### Features
+
+* Angular 10 support ([6873dac](https://github.com/dscheerens/ngx-inject/commit/6873dac30f713a3b68584a90b04b3e2f3d3dad74))
+
 ## [2.0.0](https://github.com/dscheerens/ngx-inject/compare/v1.0.0...v2.0.0) (2020-01-11)
 
 
