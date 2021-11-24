@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.0.0](https://github.com/dscheerens/ngx-inject/compare/v3.0.0...v4.0.0) (2021-11-24)
+
+
+### ⚠ BREAKING CHANGES
+
+* **deps:** peer dependencies have been updated to require at least Angular 13.0.0
+
+Co-authored-by: Jonas Koperdraat <jonas.koperdraat@ns.nl>
+
+* **deps:** upgrade to Angular 13 ([26fbec4](https://github.com/dscheerens/ngx-inject/commit/26fbec4c552957a31fa67630f7fdb5f4e1eadeff))
+
 ## [3.0.0](https://github.com/dscheerens/ngx-inject/compare/v2.0.0...v3.0.0) (2020-08-19)
 
 
