@@ -32,7 +32,6 @@
     "release": "standard-version --message \"release: v%s\"",
     "publish.dist": "npm publish build/dist"
   },
-  "sideEffects": false,
   "peerDependencies": {
     "@angular/core": ">=13.0.0"
   },
