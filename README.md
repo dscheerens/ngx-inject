@@ -33,6 +33,7 @@ Use the compatibility matrix below to determine which version of this module wor
 | `ngx-inject` - **1.x.x** | >= **6.0.0**    |
 | `ngx-inject` - **2.x.x** | >= **8.0.0**    |
 | `ngx-inject` - **3.x.x** | >= **10.0.0**   |
+| `ngx-inject` - **4.x.x** | >= **13.0.0**   |
 
 ## Provider binding
 

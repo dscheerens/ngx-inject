@@ -1,9 +1,10 @@
+/.angular/cache
 /.idea
 /.ng_pkg_build
 /.settings
 /.vscode
 /build
-/coverage
+coverage
 /tmp
 /out-tsc
 /node_modules

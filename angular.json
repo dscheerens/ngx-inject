@@ -10,7 +10,7 @@
             "prefix": "lib",
             "architect": {
                 "build": {
-                    "builder": "@angular-devkit/build-ng-packagr:build",
+                    "builder": "@angular-devkit/build-angular:ng-packagr",
                     "options": {
                         "tsConfig": "lib/tsconfig.lib.json",
                         "project": "ng-package.json"
@@ -29,19 +29,6 @@
                         "main": "lib/test.ts",
                         "tsConfig": "lib/tsconfig.spec.json",
                         "karmaConfig": "lib/karma.conf.js"
-                    }
-                },
-                "lint": {
-                    "builder": "@angular-devkit/build-angular:tslint",
-                    "options": {
-                        "format": "stylish",
-                        "tsConfig": [
-                            "lib/tsconfig.lib.json",
-                            "lib/tsconfig.spec.json"
-                        ],
-                        "exclude": [
-                            "**/node_modules/**"
-                        ]
                     }
                 }
             }
@@ -68,7 +55,14 @@
                         "styles": [
                             "demo/styles.css"
                         ],
-                        "scripts": []
+                        "scripts": [],
+                        "aot": false,
+                        "vendorChunk": true,
+                        "extractLicenses": false,
+                        "buildOptimizer": false,
+                        "sourceMap": true,
+                        "optimization": false,
+                        "namedChunks": true
                     },
                     "configurations": {
                         "production": {
@@ -82,14 +76,14 @@
                             "optimization": true,
                             "outputHashing": "all",
                             "sourceMap": false,
-                            "extractCss": true,
                             "namedChunks": false,
                             "aot": true,
                             "extractLicenses": true,
                             "vendorChunk": false,
                             "buildOptimizer": true
                         }
-                    }
+                    },
+                    "defaultConfiguration": ""
                 },
                 "serve": {
                     "builder": "@angular-devkit/build-angular:dev-server",
@@ -116,18 +110,6 @@
                         "assets": [
                             "demo/favicon.ico",
                             "demo/assets"
-                        ]
-                    }
-                },
-                "lint": {
-                    "builder": "@angular-devkit/build-angular:tslint",
-                    "options": {
-                        "tsConfig": [
-                            "demo/tsconfig.json",
-                            "demo/tsconfig.spec.json"
-                        ],
-                        "exclude": [
-                            "**/node_modules/**"
                         ]
                     }
                 }
