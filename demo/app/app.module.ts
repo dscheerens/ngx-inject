@@ -20,7 +20,7 @@ export class ExampleServiceImpl extends ExampleService {
 
 @NgModule({
     declarations: [
-        AppComponent
+        AppComponent,
     ],
     imports: [
         BrowserModule,
@@ -30,16 +30,16 @@ export class ExampleServiceImpl extends ExampleService {
             service: { useClass: ExampleServiceImpl },
             secretMessage: { useValue: 'pssst... ngx-inject is awesome!' },
             magicNumber: { useFactory: magicNumberFactory },
-            numberStorage: L33tNumberStorage
+            numberStorage: L33tNumberStorage,
         }),
-        CounterModule
+        CounterModule,
     ],
     providers: [
-        magicNumber({ useValue: 1337 })
+        magicNumber({ useValue: 1337 }),
     ],
     bootstrap: [
-        AppComponent
-    ]
+        AppComponent,
+    ],
 })
 export class AppModule {
 }

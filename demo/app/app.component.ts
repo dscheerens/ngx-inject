@@ -8,14 +8,14 @@ import {
     MAGIC_NUMBER,
     REFERENCE_DATE,
     NumberStorage,
-    L33tNumberStorage
+    L33tNumberStorage,
 } from './example.module';
 import { CounterService } from './counter.module';
 
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent {
 
@@ -36,7 +36,7 @@ export class AppComponent {
         @Inject(REFERENCE_DATE) referenceDate: Date,
         counterService: CounterService,
         numberStorage: NumberStorage,
-        l33tNumberStorage: L33tNumberStorage
+        l33tNumberStorage: L33tNumberStorage,
     ) {
         this.httpClientOk = !!httpClient;
         this.exampleServiceOk = !!exampleService;

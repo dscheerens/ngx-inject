@@ -1,12 +1,14 @@
 import { Inject, Injectable, InjectionToken, Injector, ModuleWithProviders, NgModule, Optional, Provider } from '@angular/core';
 
+import { Token } from './token.model';
+
 /**
  * Singleton service which takes care of the actual eager loading of providers.
  */
 @Injectable({ providedIn: 'root' })
 export class EagerProviderLoaderService {
 
-    private readonly loadedProviders = new Set<any>();
+    private readonly loadedProviders = new Set<unknown>();
 
     /**
      * Loads the specified providers by requesting them via the specified injector (which forces them to load). If a provider has already
@@ -21,7 +23,7 @@ export class EagerProviderLoaderService {
             .filter((providerToken) => !this.loadedProviders.has(providerToken))
             .forEach((providerToken) => {
                 this.loadedProviders.add(providerToken);
-                injector.get<any>(providerToken);
+                injector.get(providerToken);
             });
     }
 
@@ -34,7 +36,7 @@ export class EagerProviderLoaderService {
  * @param   provider The provider (or an array of providers) for which the dependency injection tokens need to be extracted.
  * @returns          An array of dependency injection tokens for the specified provider(s).
  */
-function extractProviderTokens(provider: Provider): any[] {
+function extractProviderTokens(provider: Provider): Token<unknown>[] {
     if (Array.isArray(provider)) {
         return provider.reduce((result, p) => [...result, ...extractProviderTokens(p)], []);
     }
@@ -61,7 +63,7 @@ export class EagerProviderLoaderModule {
     constructor(
         eagerProviderLoaderService: EagerProviderLoaderService,
         @Inject(EAGER_PROVIDER) @Optional() eagerProviders: Provider[],
-        injector: Injector
+        injector: Injector,
     ) {
         eagerProviderLoaderService.loadProviders(eagerProviders || [], injector);
     }
@@ -78,8 +80,8 @@ export class EagerProviderLoaderModule {
         return {
             ngModule: EagerProviderLoaderModule,
             providers: [
-                eagerLoad(provider)
-            ]
+                eagerLoad(provider),
+            ],
         };
 
     }
@@ -99,6 +101,6 @@ export class EagerProviderLoaderModule {
 export function eagerLoad(provider: Provider): Provider {
     return [
         provider,
-        { provide: EAGER_PROVIDER, useValue: provider, multi: true }
+        { provide: EAGER_PROVIDER, useValue: provider, multi: true },
     ];
 }

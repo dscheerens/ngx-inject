@@ -49,8 +49,8 @@ export class ExampleModule {
                 bindProvider(SECRET_MESSAGE, options.secretMessage),
                 bindProvider(MAGIC_NUMBER, options.magicNumber, { multi: true }),
                 bindProvider(REFERENCE_DATE, options.referenceDate, { default: { useFactory: defaultReferenceDateFactory } }),
-                bindProvider(NumberStorage, options.numberStorage)
-            ]
+                bindProvider(NumberStorage, options.numberStorage),
+            ],
         };
     }
 

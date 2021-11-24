@@ -1,4 +1,4 @@
-import { Injectable, Injector, NgModule } from '@angular/core';
+import { Injectable, Injector, NgModule, Provider } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
 import { EAGER_PROVIDER, EagerProviderLoaderModule, EagerProviderLoaderService, eagerLoad } from './eager-provider-loading';
@@ -25,25 +25,25 @@ class AnotherTestProvider {
 
 @NgModule({
     imports: [ EagerProviderLoaderModule ],
-    providers: [ eagerLoad(TestProvider) ]
+    providers: [ eagerLoad(TestProvider) ],
 })
 class TestModuleA { }
 
 @NgModule({
     imports: [ EagerProviderLoaderModule ],
-    providers: [ eagerLoad(TestProvider), eagerLoad(AnotherTestProvider) ]
+    providers: [ eagerLoad(TestProvider), eagerLoad(AnotherTestProvider) ],
 })
 class TestModuleB { }
 
 @NgModule({
     imports: [ EagerProviderLoaderModule ],
-    providers: [ ]
+    providers: [ ],
 })
 class TestModuleC { }
 
 @NgModule({
     imports: [ EagerProviderLoaderModule ],
-    providers: [ eagerLoad({ provide: 'foo', useFactory: () => new TestProvider() }) ]
+    providers: [ eagerLoad({ provide: 'foo', useFactory: () => new TestProvider() }) ],
 })
 class TestModuleD { }
 
@@ -51,8 +51,8 @@ class TestModuleD { }
     imports: [ EagerProviderLoaderModule ],
     providers: [ eagerLoad([
         TestProvider,
-        { provide: 'foo', useFactory: () => new AnotherTestProvider() }
-    ]) ]
+        { provide: 'foo', useFactory: () => new AnotherTestProvider() },
+    ]) ],
 })
 class TestModuleE { }
 
@@ -60,9 +60,9 @@ class TestModuleE { }
     imports: [
         EagerProviderLoaderModule.for([
             TestProvider,
-            { provide: 'foo', useFactory: () => new AnotherTestProvider() }
-        ])
-    ]
+            { provide: 'foo', useFactory: () => new AnotherTestProvider() },
+        ]),
+    ],
 })
 class TestModuleF { }
 
@@ -74,7 +74,7 @@ describe('eager provider loader module', () => {
 
     it('loads eager providers on application startup', () => {
         TestBed.configureTestingModule({
-            imports: [ TestModuleA, TestModuleB, TestModuleC ]
+            imports: [ TestModuleA, TestModuleB, TestModuleC ],
         });
 
         TestBed.inject(TestModuleA);
@@ -84,7 +84,7 @@ describe('eager provider loader module', () => {
 
     it('supports providers other than type providers', () => {
         TestBed.configureTestingModule({
-            imports: [ TestModuleD ]
+            imports: [ TestModuleD ],
         });
 
         TestBed.inject(TestModuleD);
@@ -94,7 +94,7 @@ describe('eager provider loader module', () => {
 
     it('supports arrays of providers', () => {
         TestBed.configureTestingModule({
-            imports: [ TestModuleE ]
+            imports: [ TestModuleE ],
         });
 
         TestBed.inject(TestModuleE);
@@ -104,12 +104,12 @@ describe('eager provider loader module', () => {
 
     it('never loads a provider more than once', () => {
         TestBed.configureTestingModule({
-            imports: [ TestModuleA, TestModuleB, TestModuleC ]
+            imports: [ TestModuleA, TestModuleB, TestModuleC ],
         });
 
         const injector: Injector = TestBed.inject(Injector);
         const eagerProviderLoaderService = injector.get(EagerProviderLoaderService);
-        const providers = injector.get<any[]>(EAGER_PROVIDER);
+        const providers = injector.get<Provider[]>(EAGER_PROVIDER);
 
         expect(providers.length).toBeGreaterThan(0);
 
@@ -128,7 +128,7 @@ describe('eager provider loader module', () => {
 
     it('does not break when no eager provider tokens are present', () => {
         TestBed.configureTestingModule({
-            imports: [ TestModuleC ]
+            imports: [ TestModuleC ],
         });
 
         TestBed.inject(TestModuleC);
@@ -138,7 +138,7 @@ describe('eager provider loader module', () => {
 
     it('supports eager loading via the static `EagerProviderLoaderModule.for` function', () => {
         TestBed.configureTestingModule({
-            imports: [ TestModuleF ]
+            imports: [ TestModuleF ],
         });
 
         TestBed.inject(TestModuleF);

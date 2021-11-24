@@ -42,15 +42,15 @@ export function anotherCounterIncrementerFactory(counterService: CounterService)
     imports: [
         EagerProviderLoaderModule.for([
             { provide: 'foo', useFactory: anotherCounterIncrementerFactory, deps: [ CounterService ] },
-            { provide: 'bar', useFactory: anotherCounterIncrementerFactory, deps: [ CounterService ] }
-        ])
+            { provide: 'bar', useFactory: anotherCounterIncrementerFactory, deps: [ CounterService ] },
+        ]),
     ],
     providers: [
         eagerLoad([
             CounterIncrementer,
         ]),
-        eagerLoad({ provide: 'baz', useFactory: anotherCounterIncrementerFactory, deps: [ CounterService ] })
-    ]
+        eagerLoad({ provide: 'baz', useFactory: anotherCounterIncrementerFactory, deps: [ CounterService ] }),
+    ],
 })
 export class CounterModule {
 
