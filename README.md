@@ -100,19 +100,22 @@ The type parameter `T` is the type of value that will be resolved by the provide
 Under the hood, the `UnboundProvider<T>` type, is simply the union of the following types:
 
 * `UnboundTypeProvider` - Uses the specified class to instantiate a value for injection.
+  The class must have a no-args constructor.
   The instance will be reused for subsequent usages of the same class as `UnboundTypeProvider`.
   In addition the class itself will also be made available as token for injection.
 
-  **Model Definition:** `UnboundTypeProvider<T> = Type<T>`
+  **Model Definition:** `UnboundTypeProvider<T> = Type<T> & HasNoArgsConstructor`
 
 * `UnboundValueProvider` - Uses the value of the `useValue` field for injection.
 
   **Model Definition:** `UnboundValueProvider<T> { useValue: T }`
 
 * `UnboundClassProvider` - Creates an instance of the specified class as injection value.
+  The class must have a no-args constructor.
+  `useClass` with `deps` is not supported. If you wish to use a class with constructor arguments, use `UnboundFactoryProvider` (`useFactory`) instead.
   Note that unlike `UnboundTypeProvider` multiple uses of the same class as `UnboundClassProvider` will also result in multiple instances of that class.
 
-  **Model Definition:** `UnboundClassProvider<T> { useClass: Type<T>;}`
+  **Model Definition:** `UnboundClassProvider<T> { useClass: Type<T> & HasNoArgsConstructor }`
 
 * `UnboundExistingProvider` - Reuses another provider, which is referenced using the specified token, to resolve the value that will be used for injection.
 

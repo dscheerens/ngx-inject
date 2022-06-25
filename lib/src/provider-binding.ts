@@ -2,8 +2,10 @@ import { Provider, Type } from '@angular/core';
 
 import { Token } from './token.model';
 
+export type HasNoArgsConstructor = new () => unknown;
+
 /** Definition (without token binding) for providers that will create a singleton instance of the specified class for injection. */
-export type UnboundTypeProvider<T> = Type<T>;
+export type UnboundTypeProvider<T> = Type<T> & HasNoArgsConstructor;
 
 /** Definition (without token binding) for providers that use the specified value for injection. */
 export interface UnboundValueProvider<T> {
@@ -14,7 +16,7 @@ export interface UnboundValueProvider<T> {
 /** Definition (without token binding) for providers that instantiate a specific class for injection. */
 export interface UnboundClassProvider<T> {
     /** Class to instantiate when being injected for a specific token. */
-    useClass: Type<T>;
+    useClass: Type<T> & HasNoArgsConstructor;
 }
 
 /** Definition (without token binding) for providers that reference another token to use for injection. */
