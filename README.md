@@ -40,7 +40,7 @@ Use the compatibility matrix below to determine which version of this module wor
 The provider binding feature from `ngx-inject` lets you separate the definition of providers in the what and how: which token vs how should a value for injection be obtained for that token.
 This separation is made possible by introducing the concept of an _unbound provider_: a provider definition without a `provide` property.
 
-An unbound provider is represented using the `UnboundProvider<T>` type which has a type argument `T` that determines the type of the value that is obtained by the provider.
+An unbound provider is represented using the `UnboundProvider<T, D>` type which has a type argument `T` that determines the type of the value that is obtained by the provider.
 To convert an unbound provider into a full provider that can be used by Angular's dependency injection framework it has to be bound to a token.
 This is done using the `bindProvider` function which takes a token and an unbound provider as arguments and combines them to yield a [`Provider`](https://angular.io/api/core/Provider) instance.
 
@@ -73,7 +73,7 @@ export class MyService {
     ]
 })
 export class MyModule {
-    public static withConfiguration(config: UnboundProvider<MyConfig>): ModuleWithProviders {
+    public static withConfiguration<D extends unknown[]>(config: UnboundProvider<MyConfig, D>): ModuleWithProviders {
         return {
             ngModule: MyModule,
             providers: [
@@ -93,11 +93,26 @@ MyModule.withConfiguration({ useValue: 5 }); // <-- TYPE ERROR!
 MyModule.withConfiguration({ useValue: { importantData: 'hmmm pie!' }); // OK :)
 ```
 
+Passing a generic type parameter that extends `unknown[]` (e.g. `<D extends unknown[]>`) from the static function to the 2nd generic type parameter of `UnboundProvider` is required to provide type-safety for `useFactory`.
+
+```typescript
+function initializeMyModuleConfigFactory(configService: ConfigService): MyConfig {
+    return configService.getMyConfiguration();
+}
+
+MyModule.withConfiguration({ useFactory: initializateMyModuleConfigFactory }); // <-- TYPE ERROR!
+MyModule.withConfiguration({ useFactory: initializateMyModuleConfigFactory, deps: [] }); // <-- TYPE ERROR!
+MyModule.withConfiguration({ useFactory: initializateMyModuleConfigFactory, deps: [HttpClient] }); // <-- TYPE ERROR!
+MyModule.withConfiguration({ useFactory: initializateMyModuleConfigFactory, deps: [HttpClient, ConfigService] }); // <-- TYPE ERROR!
+MyModule.withConfiguration({ useFactory: initializateMyModuleConfigFactory, deps: [ConfigService] }); // OK :)
+```
+
 ## Provider binding API
 
-Unbound providers can be represented using the `UnboundProvider<T>` type.
+Unbound providers can be represented using the `UnboundProvider<T, D>` type.
 The type parameter `T` is the type of value that will be resolved by the provider.
-Under the hood, the `UnboundProvider<T>` type, is simply the union of the following types:
+The type parameter `D` is used to resolve the `deps` type, and should be inferred by TypeScript.
+Under the hood, the `UnboundProvider<T, D>` type, is simply the union of the following types:
 
 * `UnboundTypeProvider` - Uses the specified class to instantiate a value for injection.
   The instance will be reused for subsequent usages of the same class as `UnboundTypeProvider`.
@@ -122,10 +137,14 @@ Under the hood, the `UnboundProvider<T>` type, is simply the union of the follow
 
 * `UnboundFactoryProvider` - Uses the specified factory function to create an injection value.
 
-  **Model Definition:** `UnboundFactoryProvider<T> { useFactory(...deps: any[]): T; deps?: any[] }`
+  **Model Definition:** `UnboundFactoryProvider<T, D extends unknown[]> { useFactory: (...deps: D) => T; deps: D }`
 
   The factory function can take an arbitrary number of parameters.
   It is invoked with resolved values of tokens in the `deps` field.
+
+* `UnboundNoArgsFactoryProvider` - Uses the specified factory function with no arguments to create an injection value.
+
+  **Model Definition:** `UnboundNoArgsFactoryProvider<T> { useFactory: () => T }`
 
 ### `bindProvider` function
 
@@ -134,10 +153,10 @@ Under the hood, the `UnboundProvider<T>` type, is simply the union of the follow
 ```typescript
 function bindProvider<T, U extends T>(
     token: ProviderToken<T>,
-    unboundProvider: UnboundProvider<U> | undefined,
+    unboundProvider: UnboundProvider<U, unknown[]> | undefined,
     options: {
         multi?: boolean;
-        default?: UnboundProvider<U>;
+        default?: UnboundProvider<U, unknown[]>;
     } = {}
 ): Provider;
 ```

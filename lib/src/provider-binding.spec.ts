@@ -212,7 +212,7 @@ class TestServiceImpl extends TestService {
 
 @NgModule()
 class ServiceModule {
-    public static withConfig(service: UnboundProvider<TestService>): ModuleWithProviders<ServiceModule> {
+    public static withConfig<D extends unknown[]>(service: UnboundProvider<TestService, D>): ModuleWithProviders<ServiceModule> {
         return {
             ngModule: ServiceModule,
             providers: [

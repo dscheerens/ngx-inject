@@ -21,38 +21,47 @@ export interface UnboundExistingProvider<T> {
     useExisting: ProviderToken<T>;
 }
 
+type ArgsToDeps<T> = {
+    [K in keyof T]: ProviderToken<T[K]>
+};
+
 /** Definition (without token binding) for providers that use a factory function to create injection values. */
-export interface UnboundFactoryProvider<T> {
+export interface UnboundFactoryProvider<T, D extends unknown[]> {
     /**
      * A function to invoke to create a value when this provider is injected for a specific token. The function is invoked with resolved
      * values of tokens in the `deps` field.
      */
-    useFactory(...deps: any[]): T; // tslint:disable-line:no-any
+    useFactory: (...deps: D) => T;  // tslint:disable-line:prefer-method-signature
 
     /**
      * A list of tokens which need to be resolved by the injector. The list of values is then used as arguments to the `useFactory`
      * function.
      */
-    deps?: any[]; // tslint:disable-line:member-ordering no-any
+    deps: ArgsToDeps<D>;
+}
+
+export interface UnboundNoArgsFactoryProvider<T> {
+    useFactory: () => T;    // tslint:disable-line:prefer-method-signature
 }
 
 /**
  * Typesafe representation for provider definitions which are not bound to a specific token (i.e. a definition wihtout `provide` property).
  */
-export type UnboundProvider<T> =
+export type UnboundProvider<T, D extends unknown[] = any[]> = // tslint:disable-line:no-any // default to any[] for backwards compatibility
     UnboundTypeProvider<T> |
     UnboundValueProvider<T> |
     UnboundClassProvider<T> |
     UnboundExistingProvider<T> |
-    UnboundFactoryProvider<T>;
+    UnboundNoArgsFactoryProvider<T> |
+    UnboundFactoryProvider<T, D>;
 
 /** Extra binding options for the `bindProvider` function. */
-export interface BindProviderOptions<U> {
+export interface BindProviderOptions<U, D extends unknown[]> {
     /** Whether the provider should be contribute to a "multi-provider" (resulting an array of instances when injected). */
     multi?: boolean;
 
     /** Default provider definition to use when the provider definition passed to the `bindProvider` function is `undefined`. */
-    default?: UnboundProvider<U>;
+    default?: UnboundProvider<U, D>;
 }
 
 /**
@@ -65,8 +74,8 @@ export interface BindProviderOptions<U> {
  */
 export function bindProvider<T, U extends T>(
     token: ProviderToken<T>,
-    unboundProvider: UnboundProvider<U> | undefined,
-    options: BindProviderOptions<U> = {},
+    unboundProvider: UnboundProvider<U, unknown[]> | undefined,
+    options: BindProviderOptions<U, unknown[]> = {},
 ): Provider {
     return (
         unboundProvider ? (
@@ -97,11 +106,11 @@ export function bindProvider<T, U extends T>(
                     useExisting: (unboundProvider as UnboundExistingProvider<U>).useExisting,
                     multi: options.multi,
                 } :
-            (unboundProvider as { useFactory?: unknown }).useFactory ?
+            (unboundProvider as UnboundFactoryProvider<U, unknown[]>).useFactory ?
                 {
                     provide: token,
-                    useFactory: (unboundProvider as UnboundFactoryProvider<U>).useFactory, // tslint:disable-line:no-unbound-method
-                    deps: (unboundProvider as UnboundFactoryProvider<U>).deps,
+                    useFactory: (unboundProvider as UnboundFactoryProvider<U, unknown[]>).useFactory,
+                    deps: (unboundProvider as UnboundFactoryProvider<U, unknown[]>).deps,
                     multi: options.multi,
                 } :
             []
@@ -134,11 +143,11 @@ export function bindProvider<T, U extends T>(
                     useExisting: (options.default as UnboundExistingProvider<U>).useExisting,
                     multi: options.multi,
                 } :
-            (options.default as { useFactory?: unknown }).useFactory ?
+            (options.default as UnboundFactoryProvider<U, unknown[]>).useFactory ?
                 {
                     provide: token,
-                    useFactory: (options.default as UnboundFactoryProvider<U>).useFactory, // tslint:disable-line:no-unbound-method
-                    deps: (options.default as UnboundFactoryProvider<U>).deps,
+                    useFactory: (options.default as UnboundFactoryProvider<U, unknown[]>).useFactory,
+                    deps: (options.default as UnboundFactoryProvider<U, unknown[]>).deps,
                     multi: options.multi,
                 } :
             []
