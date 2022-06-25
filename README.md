@@ -73,7 +73,7 @@ export class MyService {
     ]
 })
 export class MyModule {
-    public static withConfiguration(config: UnboundProvider<MyConfig>): ModuleWithProviders {
+    public static withConfiguration(config: UnboundProvider<MyConfig>): ModuleWithProviders<MyModule> {
         return {
             ngModule: MyModule,
             providers: [
