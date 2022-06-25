@@ -1,6 +1,14 @@
-import { Inject, Injectable, InjectionToken, Injector, ModuleWithProviders, NgModule, Optional, Provider } from '@angular/core';
-
-import { Token } from './token.model';
+import {
+    Inject,
+    Injectable,
+    InjectionToken,
+    Injector,
+    ModuleWithProviders,
+    NgModule,
+    Optional,
+    Provider,
+    ProviderToken,
+} from '@angular/core';
 
 /**
  * Singleton service which takes care of the actual eager loading of providers.
@@ -36,7 +44,7 @@ export class EagerProviderLoaderService {
  * @param   provider The provider (or an array of providers) for which the dependency injection tokens need to be extracted.
  * @returns          An array of dependency injection tokens for the specified provider(s).
  */
-function extractProviderTokens(provider: Provider): Token<unknown>[] {
+function extractProviderTokens(provider: Provider): ProviderToken<unknown>[] {
     if (Array.isArray(provider)) {
         return provider.reduce((result, p) => [...result, ...extractProviderTokens(p)], []);
     }

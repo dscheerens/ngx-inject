@@ -1,6 +1,4 @@
-import { Provider, Type } from '@angular/core';
-
-import { Token } from './token.model';
+import { Provider, ProviderToken, Type } from '@angular/core';
 
 /** Definition (without token binding) for providers that will create a singleton instance of the specified class for injection. */
 export type UnboundTypeProvider<T> = Type<T>;
@@ -20,7 +18,7 @@ export interface UnboundClassProvider<T> {
 /** Definition (without token binding) for providers that reference another token to use for injection. */
 export interface UnboundExistingProvider<T> {
     /** Existing token to return (equivalent to `injector.get(useExisting)`). */
-    useExisting: Token<T>;
+    useExisting: ProviderToken<T>;
 }
 
 /** Definition (without token binding) for providers that use a factory function to create injection values. */
@@ -66,7 +64,7 @@ export interface BindProviderOptions<U> {
  * @param options         Optional extra binding options.
  */
 export function bindProvider<T, U extends T>(
-    token: Token<T>,
+    token: ProviderToken<T>,
     unboundProvider: UnboundProvider<U> | undefined,
     options: BindProviderOptions<U> = {},
 ): Provider {
