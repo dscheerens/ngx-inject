@@ -73,7 +73,7 @@ export class MyService {
     ]
 })
 export class MyModule {
-    public static withConfiguration(config: UnboundProvider<MyConfig>): ModuleWithProviders {
+    public static withConfiguration(config: UnboundProvider<MyConfig>): ModuleWithProviders<MyModule> {
         return {
             ngModule: MyModule,
             providers: [
@@ -90,7 +90,7 @@ Also, since the `bindProvider` function and `UnboundProvider` model are fully ty
 
 ```typescript
 MyModule.withConfiguration({ useValue: 5 }); // <-- TYPE ERROR!
-MyModule.withConfiguration({ useValue: { importantData: 'hmmm pie!' }); // OK :)
+MyModule.withConfiguration({ useValue: { importantData: 'hmmm pie!' } }); // OK :)
 ```
 
 ## Provider binding API
