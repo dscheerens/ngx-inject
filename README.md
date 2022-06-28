@@ -73,7 +73,7 @@ export class MyService {
     ]
 })
 export class MyModule {
-    public static withConfiguration<D extends unknown[]>(config: UnboundProvider<MyConfig, D>): ModuleWithProviders {
+    public static withConfiguration<D extends unknown[]>(config: UnboundProvider<MyConfig, D>): ModuleWithProviders<MyModule> {
         return {
             ngModule: MyModule,
             providers: [
@@ -90,7 +90,7 @@ Also, since the `bindProvider` function and `UnboundProvider` model are fully ty
 
 ```typescript
 MyModule.withConfiguration({ useValue: 5 }); // <-- TYPE ERROR!
-MyModule.withConfiguration({ useValue: { importantData: 'hmmm pie!' }); // OK :)
+MyModule.withConfiguration({ useValue: { importantData: 'hmmm pie!' } }); // OK :)
 ```
 
 Passing a generic type parameter that extends `unknown[]` (e.g. `<D extends unknown[]>`) from the static function to the 2nd generic type parameter of `UnboundProvider` is required to provide type-safety for `useFactory`.
