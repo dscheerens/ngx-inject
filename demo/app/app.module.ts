@@ -1,5 +1,5 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { NgModule } from '@angular/core';
+import { Inject, Injectable, InjectionToken, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
@@ -10,12 +10,27 @@ export function magicNumberFactory(): number {
     return 42;
 }
 
-export class ExampleServiceImpl extends ExampleService {
+export const GREETING = new InjectionToken<string>('greeting', {
+    providedIn: 'root',
+    factory: () => 'Hello',
+});
 
-    public greet(name: string): string {
-        return `Hello ${name}!`;
+@Injectable({ providedIn: 'root' })
+export class Greeter {
+    public createGreetingMessage(greeting: string, name: string): string {
+        return `${greeting} ${name}!`;
+    }
+}
+
+@Injectable()
+export class ExampleServiceImpl extends ExampleService {
+    constructor(private readonly greater: Greeter, @Inject(GREETING) private readonly greeting: string) {
+        super();
     }
 
+    public greet(name: string): string {
+        return this.greater.createGreetingMessage(this.greeting, name);
+    }
 }
 
 @NgModule({

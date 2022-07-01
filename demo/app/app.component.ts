@@ -53,6 +53,8 @@ export class AppComponent {
         (console).log('numberStorage =', numberStorage);
         (console).log('l33tNumberStorage =', l33tNumberStorage);
 
+        (console).log(exampleService.greet('world'));
+
         this.counterValue = counterService.count;
     }
 }
