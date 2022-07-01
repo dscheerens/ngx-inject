@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/dscheerens/ngx-inject.svg?branch=master)](https://travis-ci.com/dscheerens/ngx-inject) [![NPM Version](https://img.shields.io/npm/v/ngx-inject.svg)](https://www.npmjs.com/package/ngx-inject)
+[![Build Status](https://github.com/dscheerens/ngx-inject/actions/workflows/main.yml/badge.svg?branch=master)](https://github.com/dscheerens/ngx-inject/actions/workflows/main.yml) [![NPM Version](https://img.shields.io/npm/v/ngx-inject.svg)](https://www.npmjs.com/package/ngx-inject)
 
 # `ngx-inject` - dependency injection utilities for Angular
 
