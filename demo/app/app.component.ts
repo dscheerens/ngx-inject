@@ -4,11 +4,11 @@ import { HttpClient } from '@angular/common/http';
 import {
     EXAMPLE_MODULE_HTTP_CLIENT,
     ExampleService,
-    SECRET_MESSAGE,
-    MAGIC_NUMBER,
-    REFERENCE_DATE,
-    NumberStorage,
     L33tNumberStorage,
+    MAGIC_NUMBER,
+    NumberStorage,
+    REFERENCE_DATE,
+    SECRET_MESSAGE,
 } from './example.module';
 import { CounterService } from './counter.module';
 
@@ -45,6 +45,8 @@ export class AppComponent {
         this.referenceDateOk = !!referenceDate;
         this.numberStorageOk = !!numberStorage;
         this.l33tNumberStorageOk = !!l33tNumberStorage;
+
+        /* eslint-disable no-console */
         (console).log('httpClient =', httpClient);
         (console).log('exampleService =', exampleService);
         (console).log('secretMessage =', secretMessage);
@@ -54,6 +56,7 @@ export class AppComponent {
         (console).log('l33tNumberStorage =', l33tNumberStorage);
 
         (console).log(exampleService.greet('world'));
+        /* eslint-enable no-console */
 
         this.counterValue = counterService.count;
     }

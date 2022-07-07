@@ -24,35 +24,35 @@ class AnotherTestProvider {
 }
 
 @NgModule({
-    imports: [ EagerProviderLoaderModule ],
-    providers: [ eagerLoad(TestProvider) ],
+    imports: [EagerProviderLoaderModule],
+    providers: [eagerLoad(TestProvider)],
 })
 class TestModuleA { }
 
 @NgModule({
-    imports: [ EagerProviderLoaderModule ],
-    providers: [ eagerLoad(TestProvider), eagerLoad(AnotherTestProvider) ],
+    imports: [EagerProviderLoaderModule],
+    providers: [eagerLoad(TestProvider), eagerLoad(AnotherTestProvider)],
 })
 class TestModuleB { }
 
 @NgModule({
-    imports: [ EagerProviderLoaderModule ],
-    providers: [ ],
+    imports: [EagerProviderLoaderModule],
+    providers: [],
 })
 class TestModuleC { }
 
 @NgModule({
-    imports: [ EagerProviderLoaderModule ],
-    providers: [ eagerLoad({ provide: 'foo', useFactory: () => new TestProvider() }) ],
+    imports: [EagerProviderLoaderModule],
+    providers: [eagerLoad({ provide: 'foo', useFactory: () => new TestProvider() })],
 })
 class TestModuleD { }
 
 @NgModule({
-    imports: [ EagerProviderLoaderModule ],
-    providers: [ eagerLoad([
+    imports: [EagerProviderLoaderModule],
+    providers: [eagerLoad([
         TestProvider,
         { provide: 'foo', useFactory: () => new AnotherTestProvider() },
-    ]) ],
+    ])],
 })
 class TestModuleE { }
 
@@ -74,7 +74,7 @@ describe('eager provider loader module', () => {
 
     it('loads eager providers on application startup', () => {
         TestBed.configureTestingModule({
-            imports: [ TestModuleA, TestModuleB, TestModuleC ],
+            imports: [TestModuleA, TestModuleB, TestModuleC],
         });
 
         TestBed.inject(TestModuleA);
@@ -84,7 +84,7 @@ describe('eager provider loader module', () => {
 
     it('supports providers other than type providers', () => {
         TestBed.configureTestingModule({
-            imports: [ TestModuleD ],
+            imports: [TestModuleD],
         });
 
         TestBed.inject(TestModuleD);
@@ -94,7 +94,7 @@ describe('eager provider loader module', () => {
 
     it('supports arrays of providers', () => {
         TestBed.configureTestingModule({
-            imports: [ TestModuleE ],
+            imports: [TestModuleE],
         });
 
         TestBed.inject(TestModuleE);
@@ -104,7 +104,7 @@ describe('eager provider loader module', () => {
 
     it('never loads a provider more than once', () => {
         TestBed.configureTestingModule({
-            imports: [ TestModuleA, TestModuleB, TestModuleC ],
+            imports: [TestModuleA, TestModuleB, TestModuleC],
         });
 
         const injector: Injector = TestBed.inject(Injector);
@@ -128,7 +128,7 @@ describe('eager provider loader module', () => {
 
     it('does not break when no eager provider tokens are present', () => {
         TestBed.configureTestingModule({
-            imports: [ TestModuleC ],
+            imports: [TestModuleC],
         });
 
         TestBed.inject(TestModuleC);
@@ -138,7 +138,7 @@ describe('eager provider loader module', () => {
 
     it('supports eager loading via the static `EagerProviderLoaderModule.for` function', () => {
         TestBed.configureTestingModule({
-            imports: [ TestModuleF ],
+            imports: [TestModuleF],
         });
 
         TestBed.inject(TestModuleF);

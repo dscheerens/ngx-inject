@@ -7,7 +7,6 @@ import { Token } from './token.model';
  */
 @Injectable({ providedIn: 'root' })
 export class EagerProviderLoaderService {
-
     private readonly loadedProviders = new Set<unknown>();
 
     /**
@@ -26,7 +25,6 @@ export class EagerProviderLoaderService {
                 injector.get(providerToken);
             });
     }
-
 }
 
 /**
@@ -38,14 +36,14 @@ export class EagerProviderLoaderService {
  */
 function extractProviderTokens(provider: Provider): Token<unknown>[] {
     if (Array.isArray(provider)) {
-        return provider.reduce((result, p) => [...result, ...extractProviderTokens(p)], []);
+        return provider.reduce<Token<unknown>[]>((result, p: Provider) => [...result, ...extractProviderTokens(p)], []);
     }
 
     if ('provide' in provider) {
-        return [ provider.provide ];
+        return [provider.provide]; // eslint-disable-line @typescript-eslint/no-unsafe-return
     }
 
-    return [ provider ];
+    return [provider];
 }
 
 /** Injection token used for registering providers which should be eagerly loaded (via the `EagerProviderLoaderModule`) */
@@ -59,13 +57,12 @@ export const EAGER_PROVIDER = new InjectionToken<Provider>('EAGER_PROVIDER');
  */
 @NgModule()
 export class EagerProviderLoaderModule {
-
     constructor(
         eagerProviderLoaderService: EagerProviderLoaderService,
-        @Inject(EAGER_PROVIDER) @Optional() eagerProviders: Provider[],
+        @Inject(EAGER_PROVIDER) @Optional() eagerProviders: Provider[] | null,
         injector: Injector,
     ) {
-        eagerProviderLoaderService.loadProviders(eagerProviders || [], injector);
+        eagerProviderLoaderService.loadProviders(eagerProviders ?? [], injector);
     }
 
     /**
@@ -85,7 +82,6 @@ export class EagerProviderLoaderModule {
         };
 
     }
-
 }
 
 /**

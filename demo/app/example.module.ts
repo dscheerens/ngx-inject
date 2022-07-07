@@ -1,13 +1,12 @@
+/* eslint-disable max-classes-per-file */
 import { HttpClient } from '@angular/common/http';
-import { NgModule, ModuleWithProviders, InjectionToken, Provider } from '@angular/core';
+import { InjectionToken, ModuleWithProviders, NgModule, Provider } from '@angular/core';
 import { UnboundProvider, bindProvider } from 'ngx-inject';
 
 export const EXAMPLE_MODULE_HTTP_CLIENT = new InjectionToken<HttpClient>('EXAMPLE_MODULE_HTTP_CLIENT');
 
 export abstract class ExampleService {
-
     public abstract greet(name: string): string;
-
 }
 
 export const SECRET_MESSAGE = new InjectionToken<string>('SECRET_MESSAGE');
@@ -39,7 +38,6 @@ interface ExampleModuleOptions {
 
 @NgModule({})
 export class ExampleModule {
-
     public static withConfig(options: ExampleModuleOptions): ModuleWithProviders<ExampleModule> {
         return {
             ngModule: ExampleModule,
@@ -53,7 +51,6 @@ export class ExampleModule {
             ],
         };
     }
-
 }
 
 export function magicNumber(magicNum: UnboundProvider<number>): Provider {
