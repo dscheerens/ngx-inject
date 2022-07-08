@@ -116,7 +116,7 @@ Under the hood, the `UnboundProvider<T>` type, is simply the union of the follow
 
 * `UnboundExistingProvider` - Reuses another provider, which is referenced using the specified token, to resolve the value that will be used for injection.
 
-  **Model Definition:** `UnboundExistingProvider<T> { useExisting: Token<T> }`
+  **Model Definition:** `UnboundExistingProvider<T> { useExisting: ProviderToken<T> }`
 
   The `useExisting` field can either be an instance of Angular's [`InjectionToken`](https://angular.io/api/core/InjectionToken) class or a direct reference to a class (abstract classes are supported as well).
 
@@ -133,7 +133,7 @@ Under the hood, the `UnboundProvider<T>` type, is simply the union of the follow
 
 ```typescript
 function bindProvider<T, U extends T>(
-    token: Token<T>,
+    token: ProviderToken<T>,
     unboundProvider: UnboundProvider<U> | undefined,
     options: {
         multi?: boolean;
