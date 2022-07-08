@@ -33,7 +33,7 @@ export interface UnboundFactoryProvider<T> {
      * A list of tokens which need to be resolved by the injector. The list of values is then used as arguments to the `useFactory`
      * function.
      */
-    deps?: any[]; // eslint-disable-line @typescript-eslint/no-explicit-any
+    deps?: unknown[];
 }
 
 /**
