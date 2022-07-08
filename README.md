@@ -122,7 +122,7 @@ Under the hood, the `UnboundProvider<T>` type, is simply the union of the follow
 
 * `UnboundFactoryProvider` - Uses the specified factory function to create an injection value.
 
-  **Model Definition:** `UnboundFactoryProvider<T> { useFactory(...deps: any[]): T; deps?: any[] }`
+  **Model Definition:** `UnboundFactoryProvider<T> { useFactory: (...deps: any[]) => T; deps?: any[] }`
 
   The factory function can take an arbitrary number of parameters.
   It is invoked with resolved values of tokens in the `deps` field.

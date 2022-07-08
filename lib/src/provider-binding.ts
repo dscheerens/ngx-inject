@@ -27,7 +27,7 @@ export interface UnboundFactoryProvider<T> {
      * A function to invoke to create a value when this provider is injected for a specific token. The function is invoked with resolved
      * values of tokens in the `deps` field.
      */
-    useFactory(...deps: any[]): T; // eslint-disable-line @typescript-eslint/no-explicit-any
+    useFactory: (...deps: any[]) => T; // eslint-disable-line @typescript-eslint/no-explicit-any, @typescript-eslint/method-signature-style
 
     /**
      * A list of tokens which need to be resolved by the injector. The list of values is then used as arguments to the `useFactory`
@@ -99,10 +99,10 @@ export function bindProvider<T, U extends T>(
                     useExisting: (unboundProvider as UnboundExistingProvider<U>).useExisting,
                     multi: options.multi,
                 } :
-            (unboundProvider as { useFactory?: unknown }).useFactory ?
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+            (unboundProvider as UnboundFactoryProvider<U>).useFactory ?
                 {
                     provide: token,
-                    // eslint-disable-next-line @typescript-eslint/unbound-method
                     useFactory: (unboundProvider as UnboundFactoryProvider<U>).useFactory,
                     deps: (unboundProvider as UnboundFactoryProvider<U>).deps,
                     multi: options.multi,
@@ -139,10 +139,10 @@ export function bindProvider<T, U extends T>(
                     useExisting: (options.default as UnboundExistingProvider<U>).useExisting,
                     multi: options.multi,
                 } :
-            (options.default as { useFactory?: unknown }).useFactory ?
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+            (options.default as UnboundFactoryProvider<U>).useFactory ?
                 {
                     provide: token,
-                    // eslint-disable-next-line @typescript-eslint/unbound-method
                     useFactory: (options.default as UnboundFactoryProvider<U>).useFactory,
                     deps: (options.default as UnboundFactoryProvider<U>).deps,
                     multi: options.multi,
