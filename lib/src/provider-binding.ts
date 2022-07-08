@@ -37,14 +37,23 @@ export interface UnboundFactoryProvider<T> {
 }
 
 /**
+ * Definition (without token binding) for providers that use the value directly for injection.
+ *
+ * This is the same as wrapping the value in an object with a `useValue` property that contains the value that is to be injected.
+ */
+ export type UnboundDirectValueProvider<T> = T;
+
+/**
  * Typesafe representation for provider definitions which are not bound to a specific token (i.e. a definition wihtout `provide` property).
  */
 export type UnboundProvider<T> =
-    UnboundTypeProvider<T> |
-    UnboundValueProvider<T> |
-    UnboundClassProvider<T> |
-    UnboundExistingProvider<T> |
-    UnboundFactoryProvider<T>;
+    | UnboundTypeProvider<T>
+    | UnboundValueProvider<T>
+    | UnboundClassProvider<T>
+    | UnboundExistingProvider<T>
+    | UnboundFactoryProvider<T>
+    | UnboundDirectValueProvider<T>
+    ;
 
 /** Extra binding options for the `bindProvider` function. */
 export interface BindProviderOptions<U> {
@@ -107,7 +116,11 @@ export function bindProvider<T, U extends T>(
                     deps: (unboundProvider as UnboundFactoryProvider<U>).deps,
                     multi: options.multi,
                 } :
-            []
+                {
+                    provide: token,
+                    useFactory: () => unboundProvider as T,
+                    multi: options.multi,
+                }
         ) :
         options.default ? (
             (options.default as { apply?: unknown }).apply ?
@@ -147,7 +160,11 @@ export function bindProvider<T, U extends T>(
                     deps: (options.default as UnboundFactoryProvider<U>).deps,
                     multi: options.multi,
                 } :
-            []
+                {
+                    provide: token,
+                    useFactory: () => options.default as T,
+                    multi: options.multi,
+                }
         ) :
         []
     );

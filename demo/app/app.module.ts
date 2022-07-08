@@ -51,7 +51,7 @@ export class ExampleServiceImpl extends ExampleService {
         CounterModule,
     ],
     providers: [
-        magicNumber({ useValue: 1337 }),
+        magicNumber(1337),
     ],
     bootstrap: [
         AppComponent,
