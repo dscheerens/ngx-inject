@@ -109,10 +109,27 @@ Under the hood, the `UnboundProvider<T>` type, is simply the union of the follow
 
   **Model Definition:** `UnboundValueProvider<T> { useValue: T }`
 
+  Values of this type can either by created manually using an object literal or using the `useValue` function:
+
+  ```typescript
+  import { useValue } from 'ngx-inject';
+
+  useValue(42); // UnboundValueProvider<number>
+  ```
+
 * `UnboundClassProvider` - Creates an instance of the specified class as injection value.
   Note that unlike `UnboundTypeProvider` multiple uses of the same class as `UnboundClassProvider` will also result in multiple instances of that class.
+  Also keep in mind that the class needs to be decorated with `@Injectable` for Angular to be able to resolve its dependencies.
 
   **Model Definition:** `UnboundClassProvider<T> { useClass: Type<T>;}`
+
+  Values of this type can either by created manually using an object literal or using the `useClass` function:
+
+  ```typescript
+  import { useClass } from 'ngx-inject';
+
+  useClass(MyService); // UnboundClassProvider<MyService>
+  ```
 
 * `UnboundExistingProvider` - Reuses another provider, which is referenced using the specified token, to resolve the value that will be used for injection.
 
@@ -120,12 +137,38 @@ Under the hood, the `UnboundProvider<T>` type, is simply the union of the follow
 
   The `useExisting` field can either be an instance of Angular's [`InjectionToken`](https://angular.io/api/core/InjectionToken) class or a direct reference to a class (abstract classes are supported as well).
 
+  Values of this type can either by created manually using an object literal or using the `useExisting` function:
+
+  ```typescript
+  import { useExisting } from 'ngx-inject';
+
+  useExisting(HttpClient); // UnboundExistingProvider<HttpClient>
+  ```
+
 * `UnboundFactoryProvider` - Uses the specified factory function to create an injection value.
 
-  **Model Definition:** `UnboundFactoryProvider<T> { useFactory: (...deps: any[]) => T; deps?: any[] }`
+  **Model Definition:** `UnboundFactoryProvider<T> { useFactory: (...deps: any[]) => T; deps?: unknown[] }`
 
   The factory function can take an arbitrary number of parameters.
   It is invoked with resolved values of tokens in the `deps` field.
+
+  Values of this type can either by created manually using an object literal or using the `useFactory` function:
+
+  ```typescript
+  import { useFactory } from 'ngx-inject';
+
+  function createUuidStream(httpClient: HttpClient): Observable<string> {
+      return httpClient.get<string>('https://my-uuid-server.com');
+  }
+
+  useFactory(createUuidStream, HttpClient); // UnboundFactoryProvider<Observable<string>>
+  ```
+
+  Using the `useFactory` function is recommended over object literals as it will enforce type checking on the dependencies (which resolve to the arguments of the factory function).
+
+* `UnboundDirectValueProvider` - Short version of `UnboundValueProvider`, where you can just use the value directly instead wrapping it in an object with a `useValue` property.
+
+  **Model Definition:** `UnboundDirectValueProvider<T> = T`
 
 ### `bindProvider` function
 

@@ -2,13 +2,25 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Inject, Injectable, InjectionToken, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { useClass, useExisting, useFactory, useValue } from 'ngx-inject';
 
 import { AppComponent } from './app.component';
 import { ExampleModule, ExampleService, L33tNumberStorage, magicNumber } from './example.module';
 import { CounterModule } from './counter.module';
 
-export function magicNumberFactory(): number {
-    return 42;
+interface MagicNumberResolver {
+    getMagicNumber(): number;
+}
+
+export function magicNumberFactory(magicNumberResolver: MagicNumberResolver): number {
+    return magicNumberResolver.getMagicNumber();
+}
+
+@Injectable({ providedIn: 'root' })
+export class ExampleMagicNumberResolver implements MagicNumberResolver {
+    public getMagicNumber(): number {
+        return 42;
+    }
 }
 
 export const GREETING = new InjectionToken<string>('greeting', {
@@ -42,10 +54,10 @@ export class ExampleServiceImpl extends ExampleService {
         BrowserModule,
         HttpClientModule,
         ExampleModule.withConfig({
-            httpClient: { useExisting: HttpClient },
-            service: { useClass: ExampleServiceImpl },
-            secretMessage: { useValue: 'pssst... ngx-inject is awesome!' },
-            magicNumber: { useFactory: magicNumberFactory },
+            httpClient: useExisting(HttpClient),
+            service: useClass(ExampleServiceImpl),
+            secretMessage: useValue('pssst... ngx-inject is awesome!'),
+            magicNumber: useFactory(magicNumberFactory, ExampleMagicNumberResolver),
             numberStorage: L33tNumberStorage,
         }),
         CounterModule,

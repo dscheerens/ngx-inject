@@ -1,4 +1,4 @@
-import { Provider, ProviderToken, Type } from '@angular/core';
+import { Inject, Optional, Provider, ProviderToken, SkipSelf, Type } from '@angular/core';
 
 /** Definition (without token binding) for providers that will create a singleton instance of the specified class for injection. */
 export type UnboundTypeProvider<T> = Type<T>;
@@ -54,6 +54,59 @@ export type UnboundProvider<T> =
     | UnboundFactoryProvider<T>
     | UnboundDirectValueProvider<T>
     ;
+
+/** Converts the parameters of a function into a tuple of tokens that resolve to the type of the parameters. */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type InjectionDependencies<T extends (...args: any) => any> = T extends (...args: infer P) => any
+    ? { [K in keyof P]: ProviderToken<P[K]> | [...(Optional | SkipSelf)[], ProviderToken<P[K]> | Inject] }
+    : never;
+
+/**
+ * Creates an `UnboundValueProvider` for the specified value.
+ *
+ * @param value The value to inject.
+ */
+export function useValue<T>(value: T): UnboundValueProvider<T> {
+    return { useValue: value };
+}
+
+/**
+ * Creates an `UnboundClassProvider` for the specified class.
+ *
+ * @param providerClass Class to instantiate when being injected for a specific token.
+ */
+export function useClass<T>(providerClass: Type<T>): UnboundClassProvider<T> {
+    return { useClass: providerClass };
+}
+
+/**
+ * Creates an `UnboundExistingProvider` for the specified `ProviderToken`.
+ *
+ * @param providerToken Existing token to return (equivalent to `injector.get(useExisting)`).
+ */
+export function useExisting<T>(providerToken: ProviderToken<T>): UnboundExistingProvider<T> {
+    return { useExisting: providerToken };
+}
+
+/**
+ * Creates an `UnboundFactoryProvider` based on the return type of the specified factory function.
+ *
+ * The usage of the `useFactory` function is preferred over manually creating an `UnboundFactoryProvider` object literal, because this
+ * function will enforce type safe constraints on the dependencies (parameters of the factory function).
+ *
+ * @param factoryFunction A function to invoke to create a value for this `token`. The function is invoked with resolved values of the
+ *                        specified dependencies (`ProviderToken`s)
+ * @param dependencies    List of `token`s to be resolved by the injector. These values are then used as arguments for the factory function.
+ */
+export function useFactory<F extends (...args: any) => any>( // eslint-disable-line @typescript-eslint/no-explicit-any
+    factoryFunction: F,
+    ...dependencies: InjectionDependencies<F>
+): UnboundFactoryProvider<ReturnType<F>> {
+    return {
+        useFactory: factoryFunction,
+        deps: dependencies,
+    };
+}
 
 /** Extra binding options for the `bindProvider` function. */
 export interface BindProviderOptions<U> {

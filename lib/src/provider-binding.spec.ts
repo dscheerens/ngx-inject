@@ -1,7 +1,7 @@
 import { InjectionToken, Injector, ModuleWithProviders, NgModule } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
-import { UnboundProvider, bindProvider } from './provider-binding';
+import { UnboundProvider, bindProvider, useClass, useExisting, useFactory, useValue } from './provider-binding';
 
 describe('bindProvider() function', () => {
     it('can bind unbound type providers', () => {
@@ -23,8 +23,8 @@ describe('bindProvider() function', () => {
         TestBed.configureTestingModule({
             imports: [
                 ValueModule.withConfig({
-                    numberValue: { useValue: 5 },
-                    stringValue: { useValue: 'foo' },
+                    numberValue: useValue(5),
+                    stringValue: useValue('foo'),
                 }),
             ],
         });
@@ -41,7 +41,7 @@ describe('bindProvider() function', () => {
     it('can bind unbound class providers', () => {
         TestBed.configureTestingModule({
             imports: [
-                ServiceModule.withConfig({ useClass: TestServiceImpl }),
+                ServiceModule.withConfig(useClass(TestServiceImpl)),
             ],
         });
 
@@ -55,10 +55,10 @@ describe('bindProvider() function', () => {
     it('can bind unbound existing providers', () => {
         TestBed.configureTestingModule({
             imports: [
-                ServiceModule.withConfig({ useExisting: TestServiceImpl }),
+                ServiceModule.withConfig(useExisting(TestServiceImpl)),
                 ValueModule.withConfig({
-                    numberValue: { useExisting: ALT_NUMBER_VALUE },
-                    stringValue: { useExisting: ALT_STRING_VALUE },
+                    numberValue: useExisting(ALT_NUMBER_VALUE),
+                    stringValue: useExisting(ALT_STRING_VALUE),
                 }),
             ],
             providers: [
@@ -88,10 +88,10 @@ describe('bindProvider() function', () => {
 
         TestBed.configureTestingModule({
             imports: [
-                ServiceModule.withConfig({ useFactory: testServiceFactory, deps: [STRING_VALUE] }),
+                ServiceModule.withConfig(useFactory(testServiceFactory, STRING_VALUE)),
                 ValueModule.withConfig({
-                    numberValue: { useFactory: () => 999 },
-                    stringValue: { useFactory: () => 'Hi' },
+                    numberValue: useFactory(() => 999),
+                    stringValue: useFactory(() => 'Hi'),
                 }),
             ],
         });
@@ -110,9 +110,9 @@ describe('bindProvider() function', () => {
     it('supports multi providers', () => {
         TestBed.configureTestingModule({
             imports: [
-                MultiValueModule.withConfig({ useValue: 42 }),
-                MultiValueModule.withConfig({ useValue: 1337 }),
-                MultiValueModule.withConfig({ useValue: 5 }),
+                MultiValueModule.withConfig(useValue(42)),
+                MultiValueModule.withConfig(useValue(1337)),
+                MultiValueModule.withConfig(useValue(5)),
             ],
         });
 
@@ -261,12 +261,12 @@ class OptionalConfigModule {
             ngModule: OptionalConfigModule,
             providers: [
                 bindProvider(NUMBER_VALUE, options.numberValue),
-                bindProvider(STRING_VALUE, options.stringValue, { default: { useValue: 'default-value' } }),
+                bindProvider(STRING_VALUE, options.stringValue, { default: useValue('default-value') }),
                 bindProvider(OBJECT_VALUE, options.objectValue, { default: { a: true, b: 'test', c: 123 } }),
-                bindProvider(TestService, options.service, { default: { useClass: TestServiceImpl } }),
+                bindProvider(TestService, options.service, { default: useClass(TestServiceImpl) }),
                 bindProvider(TestService2, options.service, { default: TestServiceImpl }),
-                bindProvider(ALT_TEST_SERVICE_1, options.service, { default: { useExisting: TestService } }),
-                bindProvider(ALT_TEST_SERVICE_2, options.service, { default: { useFactory: () => new TestServiceImpl() } }),
+                bindProvider(ALT_TEST_SERVICE_1, options.service, { default: useExisting(TestService) }),
+                bindProvider(ALT_TEST_SERVICE_2, options.service, { default: useFactory(() => new TestServiceImpl()) }),
             ],
         };
     }
