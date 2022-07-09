@@ -125,6 +125,7 @@ export interface BindProviderOptions<U> {
  * @param unboundProvider Definition of a provider which should be bound to the specified token.
  * @param options         Optional extra binding options.
  */
+// eslint-disable-next-line complexity
 export function bindProvider<T, U extends T>(
     token: ProviderToken<T>,
     unboundProvider: UnboundProvider<U> | undefined,
@@ -132,41 +133,38 @@ export function bindProvider<T, U extends T>(
 ): Provider {
     return (
         unboundProvider ? (
-            (unboundProvider as { apply?: unknown }).apply ?
+            (typeof unboundProvider === 'function') ?
                 [
                     unboundProvider,
                     {
                         provide: token,
-                        useExisting: unboundProvider as UnboundTypeProvider<U>,
+                        useExisting: unboundProvider,
                         multi: options.multi,
                     },
                 ] :
-            (unboundProvider as UnboundValueProvider<U>).useValue ?
+            (typeof unboundProvider === 'object' && 'useValue' in unboundProvider) ?
                 {
                     provide: token,
-                    useValue: (unboundProvider as UnboundValueProvider<U>).useValue,
+                    useValue: unboundProvider.useValue,
                     multi: options.multi,
                 } :
-            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-            (unboundProvider as UnboundClassProvider<U>).useClass ?
+            (typeof unboundProvider === 'object' && 'useClass' in unboundProvider) ?
                 {
                     provide: token,
-                    useClass: (unboundProvider as UnboundClassProvider<U>).useClass,
+                    useClass: unboundProvider.useClass,
                     multi: options.multi,
                 } :
-            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-            (unboundProvider as UnboundExistingProvider<U>).useExisting ?
+            (typeof unboundProvider === 'object' && 'useExisting' in unboundProvider) ?
                 {
                     provide: token,
-                    useExisting: (unboundProvider as UnboundExistingProvider<U>).useExisting,
+                    useExisting: unboundProvider.useExisting,
                     multi: options.multi,
                 } :
-            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-            (unboundProvider as UnboundFactoryProvider<U>).useFactory ?
+            (typeof unboundProvider === 'object' && 'useFactory' in unboundProvider) ?
                 {
                     provide: token,
-                    useFactory: (unboundProvider as UnboundFactoryProvider<U>).useFactory,
-                    deps: (unboundProvider as UnboundFactoryProvider<U>).deps,
+                    useFactory: unboundProvider.useFactory,
+                    deps: unboundProvider.deps,
                     multi: options.multi,
                 } :
                 {
@@ -176,41 +174,38 @@ export function bindProvider<T, U extends T>(
                 }
         ) :
         options.default ? (
-            (options.default as { apply?: unknown }).apply ?
+            (typeof options.default === 'function') ?
                 [
                     options.default,
                     {
                         provide: token,
-                        useExisting: options.default as UnboundTypeProvider<U>,
+                        useExisting: options.default,
                         multi: options.multi,
                     },
                 ] :
-            (options.default as UnboundValueProvider<U>).useValue ?
+            (typeof options.default === 'object' && 'useValue' in options.default) ?
                 {
                     provide: token,
-                    useValue: (options.default as UnboundValueProvider<U>).useValue,
+                    useValue: options.default.useValue,
                     multi: options.multi,
                 } :
-            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-            (options.default as UnboundClassProvider<U>).useClass ?
+            (typeof options.default === 'object' && 'useClass' in options.default) ?
                 {
                     provide: token,
-                    useClass: (options.default as UnboundClassProvider<U>).useClass,
+                    useClass: options.default.useClass,
                     multi: options.multi,
                 } :
-            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-            (options.default as UnboundExistingProvider<U>).useExisting ?
+            (typeof options.default === 'object' && 'useExisting' in options.default) ?
                 {
                     provide: token,
-                    useExisting: (options.default as UnboundExistingProvider<U>).useExisting,
+                    useExisting: options.default.useExisting,
                     multi: options.multi,
                 } :
-            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-            (options.default as UnboundFactoryProvider<U>).useFactory ?
+            (typeof options.default === 'object' && 'useFactory' in options.default) ?
                 {
                     provide: token,
-                    useFactory: (options.default as UnboundFactoryProvider<U>).useFactory,
-                    deps: (options.default as UnboundFactoryProvider<U>).deps,
+                    useFactory: options.default.useFactory,
+                    deps: options.default.deps,
                     multi: options.multi,
                 } :
                 {

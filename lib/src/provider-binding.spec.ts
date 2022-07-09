@@ -191,6 +191,21 @@ describe('bindProvider() function', () => {
         expect(altService1).not.toBeNull();
         expect(altService2).not.toBeNull();
     });
+
+    it('correctly handles falsy values for unbound value providers', () => {
+        const token = new InjectionToken<unknown>('token');
+
+        const tests = [0, false, null, undefined];
+
+        for (const test of tests) {
+            const unboundProvider = bindProvider(token, useValue(test));
+            if ('useValue' in unboundProvider) {
+                expect(unboundProvider.useValue).toBe(test);
+            } else {
+                fail(`No \`UnboundValueProvider\` was returned for value ${test}`);
+            }
+        }
+    });
 });
 
 interface TestObject {
